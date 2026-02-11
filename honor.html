@@ -80,14 +80,13 @@
         /* --- 列表樣式 --- */
         .honor-list { list-style: none; padding: 0; margin: 0; width: 100%; }
         
-        /* ★ 修改：增加上下 padding 為 20px (原本15px) ★ */
         .honor-item { 
             display: flex; gap: 20px; 
-            padding: 20px 0; /* 讓每一則的高度變高 */
+            padding: 20px 0; 
             border-bottom: 1px solid #eee; width: 100%; 
         }
         
-        /* ★ 修改：圖片區加大為 220x155 (原本 200x135) ★ */
+        /* 圖片區 */
         .honor-img-box { 
             flex-shrink: 0; 
             width: 220px; height: 155px; 
@@ -102,7 +101,7 @@
         
         .honor-title-row { margin-bottom: 8px; }
         .title-btn {
-            background: none; border: none; padding: 0; font-size: 1.25rem; /* 標題稍微加大一點點 */
+            background: none; border: none; padding: 0; font-size: 1.25rem; 
             color: #333; text-align: left; cursor: pointer; font-family: inherit;
             line-height: 1.4; text-decoration: none; font-weight: bold;
         }
@@ -157,7 +156,7 @@
         }
         .close-btn:hover { background: #b71c1c; }
 
-        /* 避免標題與關閉按鈕重疊 */
+        /* 標題列 */
         .modal-header-row { 
             display: flex; justify-content: space-between; align-items: center; 
             border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px;
@@ -223,7 +222,7 @@
         <div id="modal-body-text" class="modal-body-text"></div>
 
         <div id="modal-photos" style="display:none; margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px;">
-            <h3 style="font-size:1rem; margin:0 0 10px 0; color:#555;">📸 競賽照片</h3>
+            <h3 style="font-size:1rem; margin:0 0 10px 0; color:#555;">📸 活動照片</h3>
             <ul id="photo-list" class="photo-list"></ul>
         </div>
     </div>
@@ -234,7 +233,15 @@
     const DATA_URL = "https://script.google.com/macros/s/AKfycbxlLrGfUegvnoHz7fyBSiytGI9LHF8e7NN9t9grpGV1j0hcRNhkLnMh4lLLRFAzFdv-9Q/exec"; 
     const ITEMS_PER_PAGE = 3; 
 
-    // 分類設定 (顏色)
+    // ★ 5張預設圖片 (當資料沒有 images 時使用) ★
+    const DEFAULT_IMAGES = [
+        "https://esa.ntpc.edu.tw/web-heromgt/images/default_1.jpg",
+        "https://esa.ntpc.edu.tw/web-heromgt/images/default_2.jpg",
+        "https://esa.ntpc.edu.tw/web-heromgt/images/default_3.jpg",
+        "https://esa.ntpc.edu.tw/web-heromgt/images/default_4.jpg",
+        "https://esa.ntpc.edu.tw/web-heromgt/images/default_5.jpg"
+    ];
+
     const HONOR_CAT_CONFIG = {
         "all": { name: "全部", color: "#337ab7" },
         "10": { name: "國際", color: "#f39c12" },
@@ -352,25 +359,28 @@
             const dateStr = d ? (d.length === 8 ? `${d.substring(0,4)}-${d.substring(4,6)}-${d.substring(6,8)}` : d) : '';
             const catConfig = HONOR_CAT_CONFIG[item.category_id] || { name: item.category_name || "榮譽", color: "#999" };
             
-            let imgHtml = '';
+            // ★ 修改：圖片邏輯 (有圖顯示，沒圖用預設) ★
+            let imgSrc = '';
+            
             if (item.images && item.images.length > 0) {
-                imgHtml = `
-                    <div class="honor-img-box">
-                        <button onclick="openDetails(${start + index})" title="查看詳情：${item.title}">
-                            <img src="${item.images[0].url}" class="honor-thumb" alt="${item.title} 的競賽照片">
-                        </button>
-                    </div>`;
+                imgSrc = item.images[0].url; // 有上傳照片
             } else {
-                imgHtml = `
-                    <div class="honor-img-box" style="background:#f9f9f9; display:flex; align-items:center; justify-content:center; border:1px solid #ddd;">
-                        <span style="color:#ccc;">無照片</span>
-                    </div>`;
+                // 沒照片 -> 用 ID 算餘數 (0~4) -> 取對應的預設圖
+                // 若 id 不是數字，預設用第1張
+                const idNum = parseInt(item.id, 10) || 0; 
+                const defaultIndex = idNum % 5; 
+                imgSrc = DEFAULT_IMAGES[defaultIndex];
             }
+
+            const imgHtml = `
+                <div class="honor-img-box">
+                    <button onclick="openDetails(${start + index})" title="查看詳情：${item.title}">
+                        <img src="${imgSrc}" class="honor-thumb" alt="${item.title} 的活動照片">
+                    </button>
+                </div>`;
 
             const contentId = `desc-${item.id}`;
             const btnId = `btn-${item.id}`;
-            
-            // ★ 字數限制改為 70 字 ★
             const maxChars = 70; 
 
             let descHtml = '';
@@ -434,6 +444,7 @@
         modalDate.textContent = dateStr;
         modalDept.textContent = item.dept;
 
+        // ★ 彈窗邏輯：只顯示真實照片，不顯示預設圖 ★
         if (item.images && item.images.length > 0) {
             modalPhotos.style.display = 'block';
             photoList.innerHTML = item.images.map(img => `
