@@ -233,7 +233,7 @@
     const DATA_URL = "https://script.google.com/macros/s/AKfycbxlLrGfUegvnoHz7fyBSiytGI9LHF8e7NN9t9grpGV1j0hcRNhkLnMh4lLLRFAzFdv-9Q/exec"; 
     const ITEMS_PER_PAGE = 3; 
 
-    // ★ 5張預設圖片 (當資料沒有 images 時使用) ★
+    // 預設圖片
     const DEFAULT_IMAGES = [
         "https://esa.ntpc.edu.tw/web-heromgt/images/default_1.jpg",
         "https://esa.ntpc.edu.tw/web-heromgt/images/default_2.jpg",
@@ -314,7 +314,10 @@
         const btn = document.createElement('button');
         btn.className = `filter-btn ${catId === 'all' ? 'active' : ''}`;
         btn.style.setProperty('--btn-color', config.color);
-        btn.title = `篩選分類：${config.name}`;
+        
+        // ★ 修改：title 加入數量提示 ★
+        btn.title = `篩選分類：${config.name}，共 ${count} 則`; 
+        
         btn.dataset.id = catId;
         btn.innerHTML = `${config.name} <span class="count-badge">${count}</span>`;
         
@@ -359,14 +362,11 @@
             const dateStr = d ? (d.length === 8 ? `${d.substring(0,4)}-${d.substring(4,6)}-${d.substring(6,8)}` : d) : '';
             const catConfig = HONOR_CAT_CONFIG[item.category_id] || { name: item.category_name || "榮譽", color: "#999" };
             
-            // ★ 修改：圖片邏輯 (有圖顯示，沒圖用預設) ★
             let imgSrc = '';
             
             if (item.images && item.images.length > 0) {
-                imgSrc = item.images[0].url; // 有上傳照片
+                imgSrc = item.images[0].url; 
             } else {
-                // 沒照片 -> 用 ID 算餘數 (0~4) -> 取對應的預設圖
-                // 若 id 不是數字，預設用第1張
                 const idNum = parseInt(item.id, 10) || 0; 
                 const defaultIndex = idNum % 5; 
                 imgSrc = DEFAULT_IMAGES[defaultIndex];
@@ -444,7 +444,6 @@
         modalDate.textContent = dateStr;
         modalDept.textContent = item.dept;
 
-        // ★ 彈窗邏輯：只顯示真實照片，不顯示預設圖 ★
         if (item.images && item.images.length > 0) {
             modalPhotos.style.display = 'block';
             photoList.innerHTML = item.images.map(img => `
