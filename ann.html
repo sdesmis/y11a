@@ -4,148 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>學校公告</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Iansui&display=swap" rel="stylesheet">
-
     <style>
-        /* --- 基礎設定 --- */
         :root {
-            --bg-color: transparent; 
-            --text-color: #222222;
-            --link-color: #0044cc;
-            --focus-outline: 0.25rem solid #ffcc00;
-            --modal-overlay: rgba(0, 0, 0, 0.7);
-            --btn-active-bg: #0044cc;
-            --btn-active-text: #ffffff;
-            --tag-bg-dept: #f0f0f0; 
+            --bg-color: transparent; --text-color: #222222; --link-color: #0044cc;
+            --focus-outline: 0.25rem solid #ffcc00; --modal-overlay: rgba(0, 0, 0, 0.7);
+            --btn-active-bg: #0044cc; --btn-active-text: #ffffff; --tag-bg-dept: #f0f0f0; 
             --main-font: "Iansui", "Microsoft JhengHei", "Heiti TC", sans-serif;
         }
-
         *, *::before, *::after { box-sizing: border-box; }
-
-        body {
-            font-family: var(--main-font);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.5;
-            margin: 0; padding: 0;
-            font-size: 1rem;
-            width: 100%; overflow-x: hidden;
-        }
-
+        body { font-family: var(--main-font); background-color: var(--bg-color); color: var(--text-color); line-height: 1.5; margin: 0; padding: 0; font-size: 1rem; width: 100%; overflow-x: hidden; }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
         .container { width: 100%; max-width: 100vw; margin: 0; padding: 0 5px; }
-
-        /* ★ 修改：圖示樣式改為針對 img 標籤 ★ */
         .icon-img { display: inline-block; vertical-align: text-bottom; border: none; }
         .icon-top { margin-right: 4px; height: 18px; width: auto; vertical-align: middle; position: relative; top: -1px; }
         .icon-new { margin-left: 6px; height: 18px; width: auto; vertical-align: middle; }
-
-        /* --- 上方操作區 (分類 + 搜尋鈕) --- */
-        .toolbar-section {
-            display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-            gap: 10px; margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 10px;
-        }
-        
+        .toolbar-section { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; }
         .filter-group { display: flex; flex-wrap: wrap; gap: 6px; flex-grow: 1; }
-
-        .filter-btn {
-            background-color: #fff;
-            border: 2px solid var(--btn-color, #333);
-            color: var(--btn-color, #333);
-            padding: 4px 10px; 
-            font-size: 0.95rem; 
-            border-radius: 4px;
-            cursor: pointer; 
-            transition: all 0.2s;
-            font-family: inherit;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
+        .filter-btn { background-color: #fff; border: 2px solid var(--btn-color, #333); color: var(--btn-color, #333); padding: 4px 10px; font-size: 0.95rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; }
         .filter-btn:hover { background-color: rgba(0,0,0,0.05); }
-
-        .filter-btn.active {
-            background-color: var(--btn-color, #333);
-            color: #fff;
-        }
-
-        .count-badge {
-            background-color: #eee; color: #555; 
-            font-size: 0.85em; padding: 1px 6px; border-radius: 4px; 
-            min-width: 20px; text-align: center;
-        }
-        
-        .filter-btn.active .count-badge {
-            color: #333; background-color: rgba(255,255,255,0.8);
-        }
-
-        /* 按鈕顏色加深 (AAA 對比度) */
-        .search-toggle-btn {
-            background-color: #005A8C; 
-            color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;
-            font-size: 1rem; font-family: inherit; display: flex; align-items: center; gap: 5px;
-            transition: background 0.2s; font-weight: bold;
-        }
+        .filter-btn.active { background-color: var(--btn-color, #333); color: #fff; }
+        .count-badge { background-color: #eee; color: #555; font-size: 0.85em; padding: 1px 6px; border-radius: 4px; min-width: 20px; text-align: center; }
+        .filter-btn.active .count-badge { color: #333; background-color: rgba(255,255,255,0.8); }
+        .search-toggle-btn { background-color: #005A8C; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 1rem; font-family: inherit; display: flex; align-items: center; gap: 5px; transition: background 0.2s; font-weight: bold; }
         .search-toggle-btn:hover { background-color: #003F63; }
-
-        /* --- 搜尋面板 --- */
-        .search-panel {
-            background-color: #f2f2f2; border: 1px solid #ddd; border-radius: 4px;
-            padding: 15px; margin-bottom: 20px; display: none;
-        }
+        .search-panel { background-color: #f2f2f2; border: 1px solid #ddd; border-radius: 4px; padding: 15px; margin-bottom: 20px; display: none; }
         .search-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 10px; align-items: center; }
         .search-item { display: flex; align-items: center; gap: 5px; }
         .search-item label { font-weight: bold; color: #333; white-space: nowrap; }
-        .form-control {
-            padding: 6px 8px; border: 1px solid #777; 
-            border-radius: 4px; font-size: 0.95rem; font-family: inherit; color: #222;
-        }
-        
-        .btn-submit { 
-            background-color: #A30000; 
-            color: #fff; border: none; padding: 6px 15px; border-radius: 4px; 
-            cursor: pointer; font-family: inherit; font-weight: bold;
-        }
+        .form-control { padding: 6px 8px; border: 1px solid #777; border-radius: 4px; font-size: 0.95rem; font-family: inherit; color: #222; }
+        .btn-submit { background-color: #A30000; color: #fff; border: none; padding: 6px 15px; border-radius: 4px; cursor: pointer; font-family: inherit; font-weight: bold; }
         .btn-submit:hover { background-color: #7A0000; }
-        
-        .btn-reset { 
-            background-color: #fff; color: #222; border: 2px solid #555; 
-            padding: 4px 15px; border-radius: 4px; cursor: pointer; 
-            font-family: inherit; font-weight: bold;
-        }
+        .btn-reset { background-color: #fff; color: #222; border: 2px solid #555; padding: 4px 15px; border-radius: 4px; cursor: pointer; font-family: inherit; font-weight: bold; }
         .btn-reset:hover { background-color: #e6e6e6; }
-
-        /* --- 列表樣式 --- */
         .announcement-list { list-style: none; padding: 0; margin: 0; }
         .list-item { border-bottom: 1px solid #eee; padding: 0.6rem 0.4rem; display: flex; align-items: center; gap: 0.8rem; }
         .list-item:hover { background-color: rgba(0,0,0,0.03); }
         .list-date { font-family: var(--main-font); font-size: 1rem; color: #555; flex-shrink: 0; width: 11ch; }
         .list-tags { display: flex; gap: 4px; flex-wrap: wrap; min-width: 80px; max-width: 25%; }
-        
         .tag-badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.9rem; white-space: nowrap; display: inline-block; cursor: default; }
         .tag-dept { background-color: #f0f0f0; color: #333; }
-
         .login-badge { background-color: #555; color: #fff; padding: 1px 8px; border-radius: 4px; font-size: 0.9rem; margin-left: 8px; text-decoration: none; display: inline-block; vertical-align: middle; transition: background-color 0.2s; cursor: pointer; border: 1px solid #333; }
         .login-badge:hover { background-color: #333; }
-
         .list-title { flex-grow: 1; min-width: 0; }
         .title-btn { background: none; border: none; padding: 0; font-size: 1.1rem; color: var(--link-color); text-decoration: none; cursor: pointer; text-align: left; font-weight: normal; font-family: inherit; line-height: 1.5; display: inline-block; word-wrap: break-word; }
         .title-btn:hover { color: #002266; text-decoration: underline; }
         .title-btn:focus { outline: var(--focus-outline); background-color: #000; color: #ffcc00; }
-
-        /* 分頁 */
         .pagination { display: flex; justify-content: center; align-items: center; gap: 5px; margin-top: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .page-btn { padding: 8px 12px; border: 1px solid #777; background: #fff; color: var(--link-color); cursor: pointer; text-decoration: none; font-size: 1rem; border-radius: 4px; min-width: 35px; font-family: inherit; font-weight: bold; }
         .page-btn:hover { background-color: #eee; }
         .page-btn.active { background-color: var(--link-color); color: #fff; border-color: var(--link-color); }
         .page-btn:disabled { color: #777; cursor: not-allowed; background-color: #eee;}
-
-        /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 9999; }
         .modal-content { background: #fff; width: 90%; max-width: 70ch; max-height: 90vh; overflow-y: auto; padding: 1.5rem; border: 2px solid #000; border-radius: 0.5rem; position: relative; }
         .modal-body { white-space: pre-wrap; line-height: 1.8; font-size: 1.05rem; }
@@ -156,7 +67,6 @@
         .attachments-area h3 { margin: 0 0 0.5rem 0; font-size: 1rem; color: #333; }
         .attachments-area a { color: var(--link-color); font-weight: bold; display: inline-block; padding: 0.3rem; }
         #loading { font-size: 1rem; color: #666; padding: 1rem; text-align: center; }
-
         @media (max-width: 700px) {
             .list-item { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
             .list-date { width: auto; font-size: 0.9rem; display: inline-block; margin-right: 10px;}
@@ -170,44 +80,35 @@
     </style>
 </head>
 <body>
-
 <div class="container">
-    <div id="loading" role="status">↻ 公告載入中...</div>
-    
+    <div id="loading" role="status">↻ 資料載入中...</div>
     <div id="toolbar" class="toolbar-section">
         <nav id="filter-group" class="filter-group" aria-label="公告分類快速篩選">
             <span class="sr-only">載入分類中...</span>
         </nav>
-        
         <button id="toggle-search-btn" class="search-toggle-btn" title="開啟或關閉資料檢索面板" aria-expanded="false" aria-controls="search-panel">
             <svg aria-hidden="true" focusable="false" style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             資料檢索
         </button>
     </div>
-
     <div id="search-panel" class="search-panel" role="region" aria-label="複合查詢區塊">
         <div class="search-row">
             <div class="search-item">
                 <label for="search-start">公告日期：</label>
                 <input type="date" id="search-start" class="form-control" title="搜尋起日">
-                
                 <label for="search-end" class="sr-only">至 (請輸入迄日)</label>
                 <span aria-hidden="true" style="margin: 0 5px; color: #333;">至</span>
                 <input type="date" id="search-end" class="form-control" title="搜尋迄日">
             </div>
             <div class="search-item">
                 <label for="search-cat">類別：</label>
-                <select id="search-cat" class="form-control">
-                    <option value="">全部類別</option>
-                </select>
+                <select id="search-cat" class="form-control"><option value="">全部類別</option></select>
             </div>
         </div>
         <div class="search-row">
             <div class="search-item" style="flex-grow: 1;">
                 <label for="search-dept">公告處室：</label>
-                <select id="search-dept" class="form-control">
-                    <option value="">全部處室</option>
-                </select>
+                <select id="search-dept" class="form-control"><option value="">全部處室</option></select>
             </div>
             <div class="search-item" style="flex-grow: 2;">
                 <label for="search-keyword">關鍵字：</label>
@@ -219,16 +120,11 @@
             </div>
         </div>
     </div>
-    
     <ul id="announcement-list" class="announcement-list" aria-live="polite"></ul>
-    
     <nav aria-label="分頁導航">
-        <div id="pagination" class="pagination">
-            <span class="sr-only">載入分頁中...</span>
-        </div>
+        <div id="pagination" class="pagination"><span class="sr-only">載入分頁中...</span></div>
     </nav>
 </div>
-
 <div id="detail-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-content">
         <button id="modal-close-btn" class="close-btn" aria-label="關閉視窗" title="關閉">&times;</button>
@@ -240,67 +136,38 @@
             <div id="modal-period" style="color:#777; font-size: 0.9rem; margin-top: 5px;"></div>
         </div>
         <div id="modal-body" class="modal-body"></div>
-        
         <div id="modal-links" class="attachments-area" style="display:none; background-color:#eefcfc; border-color:#008080;">
             <h3 title="相關參考連結"><span aria-hidden="true">🔗</span> 參考網址：</h3>
             <ul id="link-list" style="padding-left:1.5rem; margin:0;"></ul>
         </div>
-
         <div id="modal-attachments" class="attachments-area" style="display:none;">
             <h3 title="附件下載區域"><span aria-hidden="true">📎</span> 附件下載：</h3>
             <ul id="attachment-list" style="padding-left:1.5rem; margin:0;"></ul>
         </div>
     </div>
 </div>
-
 <script>
-    // ★ 您的 GAS 網址 ★
     const DATA_URL = "https://script.google.com/macros/s/AKfycbwpj87uChIU27uvVX_ssWMBRxrreL8OzGp5i3W5GoUdpThqQukqvrpajAsazAM9dC9C/exec";
     const LOCKED_CATEGORY_ID = null; 
-    const ITEMS_PER_PAGE = 13; 
+    const ITEMS_PER_PAGE = 15; 
     const NEW_DAYS_LIMIT = 4; 
-
-    // ★ 修改：使用圖片的圖示變數 ★
     const SVG_TOP = `<img src="https://esa.ntpc.edu.tw/web-announce/images/top.png" alt="置頂" class="icon-img icon-top">`;
     const SVG_NEW = `<img src="https://esa.ntpc.edu.tw/web-announce/images/news.svg" alt="最新" class="icon-img icon-new">`;
-
-    // 正確的分類 ID 對照表
     const CATEGORY_MAP = {
         "2": "行政公告", "28": "補助及獎助學金", "29": "人事室公告", "30": "主計室公告",
         "31": "家長專區", "35": "性別平等", "36": "人權二公約", "37": "校內公告",
         "38": "人員甄選", "39": "幼兒園", "48": "體育賽事、活動", "156": "新生報到專區",
         "168": "安全棒球", "7": "研習公告", "34": "防疫專區"
     };
-
-    // 分類樣式 (含顏色)
     const CATEGORY_CONFIG = {
-        "2": { name: "行政公告", color: "#8B4513" },   
-        "28": { name: "補助及獎助學金", color: "#0056b3" }, 
-        "29": { name: "人事室公告", color: "#800080" }, 
-        "30": { name: "主計室公告", color: "#A0522D" }, 
-        "31": { name: "家長專區", color: "#006666" },   
-        "35": { name: "性別平等", color: "#800040" },   
-        "36": { name: "人權二公約", color: "#006400" }, 
-        "37": { name: "校內公告", color: "#0044cc" },   
-        "38": { name: "人員甄選", color: "#5d4037" },   
-        "39": { name: "幼兒園", color: "#556B2F" },     
-        "48": { name: "體育賽事、活動", color: "#2F4F4F" }, 
-        "156": { name: "新生報到專區", color: "#8B4513" }, 
-        "168": { name: "安全棒球", color: "#4682B4" },  
-        "7": { name: "研習公告", color: "#800000" },    
-        "34": { name: "防疫專區", color: "#e65100" }    
+        "2": { name: "行政公告", color: "#8B4513" }, "28": { name: "補助及獎助學金", color: "#0056b3" }, "29": { name: "人事室公告", color: "#800080" }, 
+        "30": { name: "主計室公告", color: "#A0522D" }, "31": { name: "家長專區", color: "#006666" }, "35": { name: "性別平等", color: "#800040" },   
+        "36": { name: "人權二公約", color: "#006400" }, "37": { name: "校內公告", color: "#0044cc" }, "38": { name: "人員甄選", color: "#5d4037" },   
+        "39": { name: "幼兒園", color: "#556B2F" }, "48": { name: "體育賽事、活動", color: "#2F4F4F" }, "156": { name: "新生報到專區", color: "#8B4513" }, 
+        "168": { name: "安全棒球", color: "#4682B4" }, "7": { name: "研習公告", color: "#800000" }, "34": { name: "防疫專區", color: "#e65100" }    
     };
-
-    // ★ 移除已停用的 ID (34 防疫專區)，不會出現在篩選列 ★
-    const CATEGORY_ORDER = [
-        "2", "28", "29", "30", "31", "35", "36", "37", "38", "39", "48", "156", "168", "7"
-    ];
-
-    // ★ 固定處室清單 (確保選單一定有這些) ★
-    const DEPT_LIST = [
-        "校長室", "教務處", "學務處", "總務處", "輔導處", 
-        "人事室", "會計室", "幼兒園"
-    ];
+    const CATEGORY_ORDER = ["2", "28", "29", "30", "31", "35", "36", "37", "38", "39", "48", "156", "168", "7"];
+    const DEPT_LIST = ["校長室", "教務處", "學務處", "總務處", "輔導處", "人事室", "會計室", "幼兒園"];
 
     let allData = [];
     let filteredData = []; 
@@ -313,7 +180,6 @@
     const paginationDiv = document.getElementById('pagination');
     const filterGroup = document.getElementById('filter-group');
     const toolbar = document.getElementById('toolbar');
-    
     const toggleSearchBtn = document.getElementById('toggle-search-btn');
     const searchPanel = document.getElementById('search-panel');
     const searchStart = document.getElementById('search-start');
@@ -323,7 +189,6 @@
     const searchKeyword = document.getElementById('search-keyword');
     const btnSearch = document.getElementById('btn-search');
     const btnReset = document.getElementById('btn-reset');
-
     const modal = document.getElementById('detail-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalDept = document.getElementById('modal-dept');
@@ -369,7 +234,6 @@
                 return;
             }
             allData = json.data;
-            
             if (LOCKED_CATEGORY_ID) {
                 toolbar.style.display = 'none'; 
                 searchPanel.style.display = 'none';
@@ -395,15 +259,16 @@
                 });
             }
         });
-
         filterGroup.innerHTML = "";
         createFilterBtn("all", counts["all"] || allData.length);
-
         CATEGORY_ORDER.forEach(catId => {
             if (CATEGORY_MAP[catId]) {
                 const name = CATEGORY_MAP[catId];
                 const count = counts[catId] || 0;
-                createFilterBtn(catId, count);
+                // ★ 修改：數量大於 0 才顯示 ★
+                if (count > 0) {
+                    createFilterBtn(catId, count);
+                }
             }
         });
     }
@@ -411,27 +276,18 @@
     function initSearchOptions() {
         const deptSelect = document.getElementById('search-dept');
         const catSelect = document.getElementById('search-cat');
-        
         const depts = new Set(DEPT_LIST);
-        allData.forEach(item => {
-            if (item.department) depts.add(item.department);
-        });
-
+        allData.forEach(item => { if (item.department) depts.add(item.department); });
         deptSelect.innerHTML = '<option value="">全部處室</option>';
         Array.from(depts).forEach(d => {
             const opt = document.createElement('option');
-            opt.value = d;
-            opt.textContent = d;
-            deptSelect.appendChild(opt);
+            opt.value = d; opt.textContent = d; deptSelect.appendChild(opt);
         });
-
         catSelect.innerHTML = '<option value="">全部類別</option>';
         CATEGORY_ORDER.forEach(catId => {
             if (CATEGORY_MAP[catId]) {
                 const opt = document.createElement('option');
-                opt.value = catId;
-                opt.textContent = CATEGORY_MAP[catId];
-                catSelect.appendChild(opt);
+                opt.value = catId; opt.textContent = CATEGORY_MAP[catId]; catSelect.appendChild(opt);
             }
         });
     }
@@ -443,17 +299,12 @@
         } else {
             config = CATEGORY_CONFIG[catId] || { name: "其他", color: "#999" };
         }
-
         const btn = document.createElement('button');
         btn.className = `filter-btn ${catId === 'all' ? 'active' : ''}`;
         btn.style.setProperty('--btn-color', config.color);
         btn.dataset.cat = catId;
-        
-        // ★ 修改：title 加入數量提示 (AAA) ★
         btn.title = `篩選分類：${config.name}，共 ${count} 則`;
-        
         btn.innerHTML = `${config.name} <span class="count-badge">${count}</span>`;
-        
         btn.addEventListener('click', () => {
             searchPanel.style.display = 'none';
             toggleSearchBtn.setAttribute('aria-expanded', 'false'); 
@@ -483,10 +334,8 @@
         const cat = searchCat.value;
         const dept = searchDept.value;
         const keyword = searchKeyword.value.trim().toLowerCase();
-
         filteredData = allData.filter(item => {
             let match = true;
-
             if (sDate || eDate) {
                 const itemDate = parseRocDate(item.date);
                 if (itemDate) {
@@ -494,18 +343,11 @@
                     if (eDate && itemDate > eDate) match = false;
                 }
             }
-            if (match && cat) {
-                if (!item.category_ids || !item.category_ids.includes(cat)) match = false;
-            }
-            if (match && dept) {
-                if (item.department !== dept) match = false;
-            }
-            if (match && keyword) {
-                if (!item.title.toLowerCase().includes(keyword)) match = false;
-            }
+            if (match && cat) { if (!item.category_ids || !item.category_ids.includes(cat)) match = false; }
+            if (match && dept) { if (item.department !== dept) match = false; }
+            if (match && keyword) { if (!item.title.toLowerCase().includes(keyword)) match = false; }
             return match;
         });
-
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         renderPage(1);
     }
@@ -522,13 +364,8 @@
     });
 
     btnSearch.addEventListener('click', performSearch);
-    
     btnReset.addEventListener('click', () => {
-        searchStart.value = '';
-        searchEnd.value = '';
-        searchCat.value = '';
-        searchDept.value = '';
-        searchKeyword.value = '';
+        searchStart.value = ''; searchEnd.value = ''; searchCat.value = ''; searchDept.value = ''; searchKeyword.value = '';
         applyFilter('all');
         document.querySelector('[data-cat="all"]').classList.add('active');
     });
@@ -536,23 +373,19 @@
     function renderPage(page) {
         currentPage = page;
         listContainer.innerHTML = "";
-        
         if (filteredData.length === 0) {
             const emptyMsg = LOCKED_CATEGORY_ID ? "目前尚無此專區的公告。" : "查無符合條件的公告。";
             listContainer.innerHTML = `<li style='padding:20px; text-align:center; color:#666;'>${emptyMsg}</li>`;
             paginationDiv.innerHTML = "";
             return;
         }
-        
         const start = (page - 1) * ITEMS_PER_PAGE;
         const end = start + ITEMS_PER_PAGE;
         const pageItems = filteredData.slice(start, end);
-
         pageItems.forEach((item, index) => {
             const li = document.createElement('li');
             li.className = 'list-item';
             const simpleDate = item.date ? item.date.split(' ')[0] : '-';
-            
             let tagsHtml = '';
             if (item.category_ids && Array.isArray(item.category_ids) && item.category_ids.length > 0) {
                 item.category_ids.forEach((id, i) => {
@@ -562,163 +395,77 @@
                     }
                 });
             }
-            if (!tagsHtml) {
-                tagsHtml = `<span class="tag-badge tag-dept" title="發布單位：${item.department}"><span class="sr-only">發布單位：</span>${item.department}</span>`;
-            }
-
+            if (!tagsHtml) { tagsHtml = `<span class="tag-badge tag-dept" title="發布單位：${item.department}"><span class="sr-only">發布單位：</span>${item.department}</span>`; }
             let topHtml = "";
-            if (item.is_top == 1 || item.is_top === "1") {
-                topHtml = SVG_TOP;
-            }
+            if (item.is_top == 1 || item.is_top === "1") { topHtml = SVG_TOP; }
             let newHtml = "";
-            if (checkIsNew(item.date)) {
-                newHtml = SVG_NEW;
-            }
-
+            if (checkIsNew(item.date)) { newHtml = SVG_NEW; }
             let titleActionHtml = "";
             let loginBadgeHtml = "";
-
             if (item.pub_view == "2") {
-                titleActionHtml = `
-                    <a href="https://esa.ntpc.edu.tw" target="_blank" class="title-btn" title="需登入系統觀看：${item.title}">
-                        ${topHtml}${item.title}${newHtml}
-                    </a>`;
+                titleActionHtml = `<a href="https://esa.ntpc.edu.tw" target="_blank" class="title-btn" title="需登入系統觀看：${item.title}">${topHtml}${item.title}${newHtml}</a>`;
                 loginBadgeHtml = `<a href="https://esa.ntpc.edu.tw" target="_blank" class="login-badge" title="需登入系統觀看">須登入系統</a>`;
             } else {
-                titleActionHtml = `
-                    <button class="title-btn" onclick="openDetails(${start + index})" title="查看公告：${item.title}">
-                        ${topHtml}${item.title}${newHtml}
-                    </button>`;
+                titleActionHtml = `<button class="title-btn" onclick="openDetails(${start + index})" title="查看公告：${item.title}">${topHtml}${item.title}${newHtml}</button>`;
             }
-
-            li.innerHTML = `
-                <div class="list-date" title="發布日期：${simpleDate}"><span class="sr-only">發布日期：</span>${simpleDate}</div>
-                <div class="list-tags">
-                    ${tagsHtml}
-                </div>
-                <div class="list-title">
-                    ${titleActionHtml}
-                    ${loginBadgeHtml}
-                </div>
-            `;
+            li.innerHTML = `<div class="list-date" title="發布日期：${simpleDate}"><span class="sr-only">發布日期：</span>${simpleDate}</div><div class="list-tags">${tagsHtml}</div><div class="list-title">${titleActionHtml}${loginBadgeHtml}</div>`;
             listContainer.appendChild(li);
         });
-
         renderPagination();
     }
 
     function renderPagination() {
         paginationDiv.innerHTML = "";
         const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-        
         if (totalPages <= 1) return;
-
         const pagesPerGroup = 10;
         const currentGroup = Math.ceil(currentPage / pagesPerGroup);
         const startPage = (currentGroup - 1) * pagesPerGroup + 1;
         const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
-
         if (startPage > 1) {
              const prevGroupBtn = document.createElement('button');
-             prevGroupBtn.className = 'page-btn';
-             prevGroupBtn.innerText = "<<"; 
-             prevGroupBtn.title = "上10頁";
-             prevGroupBtn.setAttribute('aria-label', '上10頁');
-             prevGroupBtn.onclick = () => renderPage(startPage - 1); 
-             paginationDiv.appendChild(prevGroupBtn);
+             prevGroupBtn.className = 'page-btn'; prevGroupBtn.innerText = "<<"; prevGroupBtn.title = "上10頁";
+             prevGroupBtn.setAttribute('aria-label', '上10頁'); prevGroupBtn.onclick = () => renderPage(startPage - 1); paginationDiv.appendChild(prevGroupBtn);
         }
-
         const prevBtn = document.createElement('button');
-        prevBtn.className = 'page-btn';
-        prevBtn.innerText = "<";
-        prevBtn.title = "上一頁";
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.setAttribute('aria-label', '上一頁');
-        prevBtn.onclick = () => renderPage(currentPage - 1);
-        paginationDiv.appendChild(prevBtn);
-
+        prevBtn.className = 'page-btn'; prevBtn.innerText = "<"; prevBtn.title = "上一頁";
+        prevBtn.disabled = currentPage === 1; prevBtn.setAttribute('aria-label', '上一頁'); prevBtn.onclick = () => renderPage(currentPage - 1); paginationDiv.appendChild(prevBtn);
         for (let i = startPage; i <= endPage; i++) {
             const btn = document.createElement('button');
-            btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-            btn.innerText = i;
-            btn.title = `前往第 ${i} 頁`;
-            btn.setAttribute('aria-label', `第 ${i} 頁`);
-            if(i === currentPage) btn.setAttribute('aria-current', 'page');
-            btn.onclick = () => renderPage(i);
-            paginationDiv.appendChild(btn);
+            btn.className = `page-btn ${i === currentPage ? 'active' : ''}`; btn.innerText = i; btn.title = `前往第 ${i} 頁`;
+            btn.setAttribute('aria-label', `第 ${i} 頁`); if(i === currentPage) btn.setAttribute('aria-current', 'page');
+            btn.onclick = () => renderPage(i); paginationDiv.appendChild(btn);
         }
-
         const nextBtn = document.createElement('button');
-        nextBtn.className = 'page-btn';
-        nextBtn.innerText = ">";
-        nextBtn.title = "下一頁";
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.setAttribute('aria-label', '下一頁');
-        nextBtn.onclick = () => renderPage(currentPage + 1);
-        paginationDiv.appendChild(nextBtn);
-
+        nextBtn.className = 'page-btn'; nextBtn.innerText = ">"; nextBtn.title = "下一頁";
+        nextBtn.disabled = currentPage === totalPages; nextBtn.setAttribute('aria-label', '下一頁'); nextBtn.onclick = () => renderPage(currentPage + 1); paginationDiv.appendChild(nextBtn);
         if (endPage < totalPages) {
              const nextGroupBtn = document.createElement('button');
-             nextGroupBtn.className = 'page-btn';
-             nextGroupBtn.innerText = ">>"; 
-             nextGroupBtn.title = "下10頁";
-             nextGroupBtn.setAttribute('aria-label', '下10頁');
-             nextGroupBtn.onclick = () => renderPage(endPage + 1); 
-             paginationDiv.appendChild(nextGroupBtn);
+             nextGroupBtn.className = 'page-btn'; nextGroupBtn.innerText = ">>"; nextGroupBtn.title = "下10頁";
+             nextGroupBtn.setAttribute('aria-label', '下10頁'); nextGroupBtn.onclick = () => renderPage(endPage + 1); paginationDiv.appendChild(nextGroupBtn);
         }
     }
 
     window.openDetails = function(index) {
         const item = filteredData[index];
         lastFocusedElement = document.activeElement;
-        
-        if(modalTitle) {
-            modalTitle.textContent = item.title;
-            modalTitle.setAttribute('title', `公告標題：${item.title}`);
-        }
-        
-        if(modalDept) {
-            const fullDept = item.job_title ? `${item.department} / ${item.job_title}` : item.department;
-            modalDept.innerHTML = `<span class="sr-only">發布單位：</span>${fullDept}`;
-        }
-        
-        if(modalPeriod) {
-            if (item.date_start && item.date_end) {
-                modalPeriod.innerHTML = `公告期間：${item.date_start} ~ ${item.date_end}`;
-            } else {
-                modalPeriod.innerHTML = "";
-            }
-        }
-        
+        if(modalTitle) { modalTitle.textContent = item.title; modalTitle.setAttribute('title', `公告標題：${item.title}`); }
+        if(modalDept) { const fullDept = item.job_title ? `${item.department} / ${item.job_title}` : item.department; modalDept.innerHTML = `<span class="sr-only">發布單位：</span>${fullDept}`; }
+        if(modalPeriod) { if (item.date_start && item.date_end) { modalPeriod.innerHTML = `公告期間：${item.date_start} ~ ${item.date_end}`; } else { modalPeriod.innerHTML = ""; } }
         if(modalBody) modalBody.innerHTML = item.content_html;
-        
         if (modalLinks) {
             if (item.link_a || item.link_b) {
                 modalLinks.style.display = 'block';
                 let linksHtml = '';
-                if (item.link_a) {
-                    linksHtml += `<li><a href="${item.link_a}" target="_blank" title="參考網址1：${item.link_a}">參考網址1</a></li>`;
-                }
-                if (item.link_b) {
-                    linksHtml += `<li><a href="${item.link_b}" target="_blank" title="參考網址2：${item.link_b}">參考網址2</a></li>`;
-                }
+                if (item.link_a) { linksHtml += `<li><a href="${item.link_a}" target="_blank" title="參考網址1：${item.link_a}">參考網址1</a></li>`; }
+                if (item.link_b) { linksHtml += `<li><a href="${item.link_b}" target="_blank" title="參考網址2：${item.link_b}">參考網址2</a></li>`; }
                 if(linkList) linkList.innerHTML = linksHtml;
-            } else {
-                modalLinks.style.display = 'none';
-            }
+            } else { modalLinks.style.display = 'none'; }
         }
-
         if (item.attachments && item.attachments.length > 0) {
             if(modalAttachments) modalAttachments.style.display = 'block';
-            if(attachmentList) {
-                attachmentList.innerHTML = item.attachments.map(f => `
-                    <li><a href="${f.url}" target="_blank" title="下載附件：${f.name}">下載：${f.name}</a></li>
-                `).join('');
-            }
-        } else {
-            if(modalAttachments) modalAttachments.style.display = 'none';
-        }
-        
+            if(attachmentList) { attachmentList.innerHTML = item.attachments.map(f => `<li><a href="${f.url}" target="_blank" title="下載附件：${f.name}">下載：${f.name}</a></li>`).join(''); }
+        } else { if(modalAttachments) modalAttachments.style.display = 'none'; }
         modal.style.display = 'flex';
         closeBtn.focus();
         document.body.style.overflow = 'hidden';
@@ -733,8 +480,6 @@
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'flex') closeModal(); });
-
 </script>
-
 </body>
 </html>
