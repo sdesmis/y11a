@@ -17,8 +17,11 @@
             --link-color: #0044cc;
             --focus-outline: 0.25rem solid #ffcc00;
             --modal-overlay: rgba(0, 0, 0, 0.7);
-            --badge-bg: #fff9c4; 
-            --badge-text: #8d6e63;
+            
+            /* 原系統的黃色標籤配色 */
+            --badge-bg: #fff59d; /* 淺黃色背景 */
+            --badge-text: #5d4037; /* 深褐色文字 */
+            
             --tag-bg-dept: #f0f0f0;
             --main-font: "Iansui", "Microsoft JhengHei", "Heiti TC", sans-serif;
         }
@@ -86,7 +89,7 @@
             border-bottom: 1px solid #eee; width: 100%; 
         }
         
-        /* 圖片區 */
+        /* 圖片區 (加大) */
         .honor-img-box { 
             flex-shrink: 0; 
             width: 220px; height: 155px; 
@@ -146,28 +149,34 @@
         
         .close-btn { 
             position: absolute; top: 15px; right: 15px; 
-            background: #d32f2f; color: #fff; border: none; 
-            width: 32px; height: 32px; border-radius: 4px; 
-            font-size: 1.5rem; padding: 0; text-align: center; 
-            cursor: pointer; font-family: Arial, sans-serif; 
+            background: #fff; color: #333; border: 1px solid #ccc; /* 修改關閉按鈕樣式更像原系統 */
+            width: 40px; height: 32px; border-radius: 4px; 
+            font-size: 1rem; padding: 0; text-align: center; 
+            cursor: pointer; font-family: inherit; 
             transition: background 0.2s; 
-            display: flex; align-items: center; justify-content: center; line-height: 1; 
+            display: flex; align-items: center; justify-content: center; 
             z-index: 10;
         }
-        .close-btn:hover { background: #b71c1c; }
+        .close-btn:hover { background: #eee; }
 
-        /* 標題列 */
         .modal-header-row { 
             display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px;
-            padding-right: 40px; 
+            padding-bottom: 15px; margin-bottom: 20px;
+            padding-right: 50px; /* 避開關閉按鈕 */
         }
         
-        .honor-badge { display: inline-flex; align-items: center; gap: 5px; background-color: var(--badge-bg); color: var(--badge-text); padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 1rem; }
-        .badge-icon { width: 18px; height: 18px; fill: currentColor; }
+        /* ★ 黃色標題標籤 (還原原系統樣式) ★ */
+        .honor-badge { 
+            display: inline-flex; align-items: center; gap: 8px; 
+            background-color: var(--badge-bg); color: var(--badge-text); 
+            padding: 8px 15px; border-radius: 0; /* 原系統是直角或微圓角 */
+            font-weight: normal; font-size: 1.1rem; 
+        }
         
-        .modal-title-text { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; line-height: 1.4; }
-        .modal-body-text { font-size: 1.1rem; line-height: 1.8; color: #333; white-space: pre-wrap; margin-bottom: 30px; }
+        .badge-icon { width: 24px; height: 24px; vertical-align: middle; border: none; }
+        
+        .modal-title-text { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; line-height: 1.4; color: #222; }
+        .modal-body-text { font-size: 1.1rem; line-height: 1.8; color: #444; white-space: pre-wrap; margin-bottom: 30px; }
         
         .photo-list { list-style: none; padding: 0; margin: 15px 0 0 0; display: flex; flex-wrap: wrap; gap: 15px; }
         .photo-item img { height: 150px; width: auto; max-width: 100%; border: 1px solid #ddd; padding: 3px; object-fit: contain; background: #fff; transition: transform 0.2s; }
@@ -203,16 +212,16 @@
 
 <div id="detail-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
     <div class="modal-content">
-        <button id="modal-close-btn" class="close-btn" title="關閉">&times;</button>
+        <button id="modal-close-btn" class="close-btn" title="關閉">關閉</button>
 
         <div class="modal-header-row">
             <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                 <span class="honor-badge">
-                    <svg class="badge-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    榮譽榜
+                    <img src="https://esa.ntpc.edu.tw/web-heromgt/images/trophy.svg" alt="獎盃圖示" class="badge-icon">
+                    榮譽榜公告
                 </span>
-                <div style="color:#666; font-size:0.95rem;">
-                    <span id="modal-dept"></span> | <span id="modal-date"></span>
+                <div style="color:#888; font-size:0.95rem;">
+                    <span id="modal-dept"></span> <span id="modal-date" style="margin-left: 5px;"></span>
                 </div>
             </div>
         </div>
@@ -221,8 +230,13 @@
         
         <div id="modal-body-text" class="modal-body-text"></div>
 
-        <div id="modal-photos" style="display:none; margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px;">
-            <h3 style="font-size:1rem; margin:0 0 10px 0; color:#555;">📸 競賽照片</h3>
+        <div id="modal-photos" style="display:none; margin-top: 30px;">
+            <div style="margin-bottom: 15px;">
+                <span class="honor-badge">
+                    <img src="https://esa.ntpc.edu.tw/web-heromgt/images/trophy.svg" alt="獎盃圖示" class="badge-icon">
+                    競賽照片
+                </span>
+            </div>
             <ul id="photo-list" class="photo-list"></ul>
         </div>
     </div>
@@ -233,7 +247,7 @@
     const DATA_URL = "https://script.google.com/macros/s/AKfycbxlLrGfUegvnoHz7fyBSiytGI9LHF8e7NN9t9grpGV1j0hcRNhkLnMh4lLLRFAzFdv-9Q/exec"; 
     const ITEMS_PER_PAGE = 3; 
 
-    // 預設圖片
+    // 預設圖片 (輪播用)
     const DEFAULT_IMAGES = [
         "https://esa.ntpc.edu.tw/web-heromgt/images/default_1.jpg",
         "https://esa.ntpc.edu.tw/web-heromgt/images/default_2.jpg",
@@ -314,10 +328,7 @@
         const btn = document.createElement('button');
         btn.className = `filter-btn ${catId === 'all' ? 'active' : ''}`;
         btn.style.setProperty('--btn-color', config.color);
-        
-        // ★ 修改：title 加入數量提示 ★
-        btn.title = `篩選分類：${config.name}，共 ${count} 則`; 
-        
+        btn.title = `篩選分類：${config.name}，共 ${count} 則`;
         btn.dataset.id = catId;
         btn.innerHTML = `${config.name} <span class="count-badge">${count}</span>`;
         
@@ -363,7 +374,6 @@
             const catConfig = HONOR_CAT_CONFIG[item.category_id] || { name: item.category_name || "榮譽", color: "#999" };
             
             let imgSrc = '';
-            
             if (item.images && item.images.length > 0) {
                 imgSrc = item.images[0].url; 
             } else {
@@ -375,7 +385,7 @@
             const imgHtml = `
                 <div class="honor-img-box">
                     <button onclick="openDetails(${start + index})" title="查看詳情：${item.title}">
-                        <img src="${imgSrc}" class="honor-thumb" alt="${item.title} 的競賽照片">
+                        <img src="${imgSrc}" class="honor-thumb" alt="${item.title} 的活動照片">
                     </button>
                 </div>`;
 
