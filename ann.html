@@ -38,10 +38,10 @@
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
         .container { width: 100%; max-width: 100vw; margin: 0; padding: 0 5px; }
 
-        /* SVG 圖示 */
-        .icon-svg { display: inline-block; vertical-align: text-bottom; }
-        .icon-top { color: #d32f2f; margin-right: 4px; width: 18px; height: 18px; }
-        .icon-new { margin-left: 6px; height: 18px; vertical-align: middle; }
+        /* ★ 修改：圖示樣式改為針對 img 標籤 ★ */
+        .icon-img { display: inline-block; vertical-align: text-bottom; border: none; }
+        .icon-top { margin-right: 4px; height: 18px; width: auto; vertical-align: middle; position: relative; top: -1px; }
+        .icon-new { margin-left: 6px; height: 18px; width: auto; vertical-align: middle; }
 
         /* --- 上方操作區 (分類 + 搜尋鈕) --- */
         .toolbar-section {
@@ -260,17 +260,19 @@
     const ITEMS_PER_PAGE = 13; 
     const NEW_DAYS_LIMIT = 4; 
 
-    // SVG
-    const SVG_TOP = `<svg aria-hidden="true" class="icon-svg icon-top" viewBox="0 0 24 24" fill="currentColor"><title>置頂</title><path d="M16 9V4l1 0c0.55 0 1-0.45 1-1s-0.45-1-1-1H7C6.45 2 6 2.45 6 3s0.45 1 1 1l1 0v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"></path></svg>`;
-    const SVG_NEW = `<svg aria-hidden="true" class="icon-svg icon-new" viewBox="0 0 34 16"><title>最新</title><rect width="34" height="16" rx="3" fill="#d32f2f"/><text x="17" y="12" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="10">NEW</text></svg>`;
+    // ★ 修改：使用圖片的圖示變數 ★
+    const SVG_TOP = `<img src="https://esa.ntpc.edu.tw/web-announce/images/top.png" alt="置頂" class="icon-img icon-top">`;
+    const SVG_NEW = `<img src="https://esa.ntpc.edu.tw/web-announce/images/new.svg" alt="最新" class="icon-img icon-new">`;
 
+    // 正確的分類 ID 對照表
     const CATEGORY_MAP = {
-        "2": "行政公告", "28": "補助及獎助學金", "29": "人事室公告", "30": "會計室公告",
+        "2": "行政公告", "28": "補助及獎助學金", "29": "人事室公告", "30": "主計室公告",
         "31": "家長專區", "35": "性別平等", "36": "人權二公約", "37": "校內公告",
         "38": "人員甄選", "39": "幼兒園", "48": "體育賽事、活動", "156": "新生報到專區",
         "168": "安全棒球", "7": "研習公告", "34": "防疫專區"
     };
 
+    // 分類樣式 (含顏色)
     const CATEGORY_CONFIG = {
         "2": { name: "行政公告", color: "#8B4513" },   
         "28": { name: "補助及獎助學金", color: "#0056b3" }, 
@@ -289,6 +291,7 @@
         "34": { name: "防疫專區", color: "#e65100" }    
     };
 
+    // ★ 移除已停用的 ID (34 防疫專區)，不會出現在篩選列 ★
     const CATEGORY_ORDER = [
         "2", "28", "29", "30", "31", "35", "36", "37", "38", "39", "48", "156", "168", "7"
     ];
@@ -296,7 +299,7 @@
     // ★ 固定處室清單 (確保選單一定有這些) ★
     const DEPT_LIST = [
         "校長室", "教務處", "學務處", "總務處", "輔導處", 
-        "人事室", "主計室", "幼兒園"
+        "人事室", "會計室", "幼兒園"
     ];
 
     let allData = [];
@@ -406,7 +409,6 @@
     }
 
     function initSearchOptions() {
-        // 固定處室清單 + 動態補充
         const deptSelect = document.getElementById('search-dept');
         const catSelect = document.getElementById('search-cat');
         
