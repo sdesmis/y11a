@@ -18,9 +18,9 @@
             --focus-outline: 0.25rem solid #ffcc00;
             --modal-overlay: rgba(0, 0, 0, 0.7);
             
-            /* 原系統的黃色標籤配色 */
-            --badge-bg: #fff59d; /* 淺黃色背景 */
-            --badge-text: #5d4037; /* 深褐色文字 */
+            /* 黃色標籤配色 */
+            --badge-bg: #fff59d; 
+            --badge-text: #5d4037; 
             
             --tag-bg-dept: #f0f0f0;
             --main-font: "Iansui", "Microsoft JhengHei", "Heiti TC", sans-serif;
@@ -89,7 +89,7 @@
             border-bottom: 1px solid #eee; width: 100%; 
         }
         
-        /* 圖片區 (加大) */
+        /* 圖片區 */
         .honor-img-box { 
             flex-shrink: 0; 
             width: 220px; height: 155px; 
@@ -147,36 +147,31 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 9999; }
         .modal-content { background: #fff; width: 95%; max-width: 60rem; max-height: 90vh; overflow-y: auto; padding: 2rem; border-radius: 4px; position: relative; border: 2px solid #000; }
         
+        /* ★ 修改：改回紅色 X 按鈕樣式 ★ */
         .close-btn { 
             position: absolute; top: 15px; right: 15px; 
-            background: #fff; color: #333; border: 1px solid #ccc; /* 修改關閉按鈕樣式更像原系統 */
-            width: 40px; height: 32px; border-radius: 4px; 
-            font-size: 1rem; padding: 0; text-align: center; 
-            cursor: pointer; font-family: inherit; 
+            background: #d32f2f; color: #fff; border: none; 
+            width: 32px; height: 32px; border-radius: 4px; 
+            font-size: 1.5rem; padding: 0; text-align: center; 
+            cursor: pointer; font-family: Arial, sans-serif; 
             transition: background 0.2s; 
-            display: flex; align-items: center; justify-content: center; 
+            display: flex; align-items: center; justify-content: center; line-height: 1; 
             z-index: 10;
         }
-        .close-btn:hover { background: #eee; }
+        .close-btn:hover { background: #b71c1c; }
 
         .modal-header-row { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding-bottom: 15px; margin-bottom: 20px;
-            padding-right: 50px; /* 避開關閉按鈕 */
+            border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px;
+            padding-right: 40px; 
         }
         
-        /* ★ 黃色標題標籤 (還原原系統樣式) ★ */
-        .honor-badge { 
-            display: inline-flex; align-items: center; gap: 8px; 
-            background-color: var(--badge-bg); color: var(--badge-text); 
-            padding: 8px 15px; border-radius: 0; /* 原系統是直角或微圓角 */
-            font-weight: normal; font-size: 1.1rem; 
-        }
+        /* 黃色標籤 */
+        .honor-badge { display: inline-flex; align-items: center; gap: 5px; background-color: var(--badge-bg); color: var(--badge-text); padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 1rem; }
+        .badge-icon { width: 18px; height: 18px; fill: currentColor; }
         
-        .badge-icon { width: 24px; height: 24px; vertical-align: middle; border: none; }
-        
-        .modal-title-text { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; line-height: 1.4; color: #222; }
-        .modal-body-text { font-size: 1.1rem; line-height: 1.8; color: #444; white-space: pre-wrap; margin-bottom: 30px; }
+        .modal-title-text { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; line-height: 1.4; }
+        .modal-body-text { font-size: 1.1rem; line-height: 1.8; color: #333; white-space: pre-wrap; margin-bottom: 30px; }
         
         .photo-list { list-style: none; padding: 0; margin: 15px 0 0 0; display: flex; flex-wrap: wrap; gap: 15px; }
         .photo-item img { height: 150px; width: auto; max-width: 100%; border: 1px solid #ddd; padding: 3px; object-fit: contain; background: #fff; transition: transform 0.2s; }
@@ -212,7 +207,7 @@
 
 <div id="detail-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
     <div class="modal-content">
-        <button id="modal-close-btn" class="close-btn" title="關閉">關閉</button>
+        <button id="modal-close-btn" class="close-btn" title="關閉">&times;</button>
 
         <div class="modal-header-row">
             <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
@@ -247,7 +242,6 @@
     const DATA_URL = "https://script.google.com/macros/s/AKfycbxlLrGfUegvnoHz7fyBSiytGI9LHF8e7NN9t9grpGV1j0hcRNhkLnMh4lLLRFAzFdv-9Q/exec"; 
     const ITEMS_PER_PAGE = 3; 
 
-    // 預設圖片 (輪播用)
     const DEFAULT_IMAGES = [
         "https://esa.ntpc.edu.tw/web-heromgt/images/default_1.jpg",
         "https://esa.ntpc.edu.tw/web-heromgt/images/default_2.jpg",
