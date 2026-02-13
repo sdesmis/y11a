@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Iansui&display=swap" rel="stylesheet">
 
     <style>
+        /* --- 基礎設定 --- */
         :root {
             --bg-color: transparent; 
             --text-color: #222222;
@@ -21,56 +22,152 @@
             --tag-bg-dept: #f0f0f0;
             --main-font: "Iansui", "Microsoft JhengHei", "Heiti TC", sans-serif;
         }
+
         *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: var(--main-font); background-color: var(--bg-color); color: var(--text-color); line-height: 1.5; margin: 0; padding: 0; font-size: 1rem; width: 100%; overflow-x: hidden; }
+
+        body {
+            font-family: var(--main-font);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0; padding: 0;
+            font-size: 1rem;
+            width: 100%; overflow-x: hidden;
+        }
+
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
         .container { width: 100%; max-width: 100vw; margin: 0; padding: 0 5px; }
-        .filter-section { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #ccc; }
-        .filter-btn { background-color: #fff; border: 2px solid var(--btn-color, #333); color: var(--btn-color, #333); padding: 4px 10px; font-size: 0.95rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; }
+
+        /* --- 分類篩選按鈕 --- */
+        .filter-section {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px dashed #ccc;
+        }
+        
+        .filter-btn {
+            background-color: #fff; border: 2px solid var(--btn-color, #333); color: var(--btn-color, #333);
+            padding: 4px 10px; font-size: 0.95rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;
+            font-family: inherit; font-weight: bold; display: inline-flex; align-items: center; gap: 6px;
+        }
         .filter-btn:hover { background-color: rgba(0,0,0,0.05); }
         .filter-btn:focus { outline: var(--focus-outline); background-color: #000 !important; color: #ffcc00 !important; border-color: #ffcc00 !important; }
         .filter-btn.active { background-color: var(--btn-color, #333); color: #fff; }
         .count-badge { background-color: #eee; color: #555; font-size: 0.85em; padding: 1px 6px; border-radius: 4px; min-width: 20px; text-align: center; }
         .filter-btn.active .count-badge { color: #333; background-color: rgba(255,255,255,0.8); }
+
+        /* --- 列表樣式 --- */
         .honor-list { list-style: none; padding: 0; margin: 0; width: 100%; }
-        .honor-item { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid #eee; width: 100%; }
-        .honor-img-box { flex-shrink: 0; width: 220px; height: 155px; position: relative; }
-        .honor-img-box button { width: 100%; height: 100%; padding: 0; border: none; background: none; cursor: pointer; }
-        .honor-thumb { width: 100%; height: 100%; object-fit: cover; border: 1px solid #ddd; padding: 3px; background: #fff; display: block; }
-        .honor-img-box button:focus { outline: var(--focus-outline); }
+        
+        .honor-item { 
+            display: flex; gap: 20px; 
+            padding: 20px 0; 
+            border-bottom: 1px solid #eee; width: 100%; 
+        }
+        
+        /* 圖片容器 */
+        .honor-img-box { 
+            flex-shrink: 0; 
+            width: 220px; height: 155px; 
+            position: relative; 
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        /* 靜態圖片按鈕 */
+        .honor-static-btn { width: 100%; height: 100%; padding: 0; border: none; background: none; cursor: pointer; display: block; }
+        .honor-thumb { width: 100%; height: 100%; object-fit: cover; padding: 3px; background: #fff; display: block; }
+        .honor-static-btn:focus { outline: var(--focus-outline); }
+
+        /* 列表輪播樣式 */
+        .mini-carousel { width: 100%; height: 100%; position: relative; overflow: hidden; }
+        
+        .mc-slide {
+            width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0;
+            display: none; 
+            cursor: pointer;
+        }
+        .mc-slide.active { display: block; }
+        .mc-slide img { width: 100%; height: 100%; object-fit: cover; padding: 3px; background: #fff; }
+
+        .mc-control {
+            position: absolute;
+            background-color: rgba(0,0,0,0.6);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            z-index: 5;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .mc-control:hover { background-color: rgba(0,0,0,0.85); }
+        .mc-control:focus { outline: var(--focus-outline); background-color: #000; border: 2px solid #ffcc00; }
+
+        .mc-play-btn { top: 5px; left: 5px; width: 28px; height: 28px; border-radius: 50%; font-size: 0.8rem; }
+        .mc-nav-btn { top: 50%; transform: translateY(-50%); width: 30px; height: 50px; font-size: 1.2rem; background-color: rgba(0,0,0,0.3); }
+        .mc-prev { left: 0; }
+        .mc-next { right: 0; }
+
+        /* 內容區 */
         .honor-content-box { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; }
         .honor-title-row { margin-bottom: 8px; }
-        .title-btn { background: none; border: none; padding: 0; font-size: 1.25rem; color: #333; text-align: left; cursor: pointer; font-family: inherit; line-height: 1.4; text-decoration: none; font-weight: bold; }
+        .title-btn {
+            background: none; border: none; padding: 0; font-size: 1.25rem; 
+            color: #333; text-align: left; cursor: pointer; font-family: inherit;
+            line-height: 1.4; text-decoration: none; font-weight: bold;
+        }
         .title-btn:hover { color: var(--link-color); text-decoration: underline; }
         .title-btn:focus { outline: var(--focus-outline); background-color: #000; color: #ffcc00; text-decoration: underline; }
+        
         .honor-desc { font-size: 1rem; color: #555; line-height: 1.6; margin-bottom: 8px; white-space: pre-wrap; word-break: break-word; }
         .desc-truncated { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .show-more-btn { color: var(--link-color); cursor: pointer; font-size: 0.95rem; background: none; border: none; padding: 0; font-family: inherit; text-align: left; display: inline-block; margin-bottom: 10px; }
         .show-more-btn:hover { text-decoration: underline; }
         .show-more-btn:focus { outline: var(--focus-outline); background-color: #000; color: #ffcc00; }
+        
         .honor-meta { margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.9rem; color: #666; }
         .tag-badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem; white-space: nowrap; display: inline-block; cursor: default; }
         .tag-dept { background-color: var(--tag-bg-dept); color: #333; }
+
+        /* 分頁 */
         .pagination { display: flex; justify-content: center; align-items: center; gap: 5px; margin-top: 25px; margin-bottom: 20px; flex-wrap: wrap; }
         .page-btn { padding: 8px 12px; border: 1px solid #ddd; background: #fff; color: var(--link-color); cursor: pointer; text-decoration: none; font-size: 1rem; border-radius: 4px; min-width: 35px; font-family: inherit; }
         .page-btn:hover { background-color: #eee; }
         .page-btn.active { background-color: var(--link-color); color: #fff; border-color: var(--link-color); }
         .page-btn:disabled { color: #ccc; cursor: not-allowed; }
         .page-btn:focus { outline: var(--focus-outline); background-color: #000; color: #ffcc00; border-color: #ffcc00; }
+
+        /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 9999; }
         .modal-content { background: #fff; width: 95%; max-width: 60rem; max-height: 90vh; overflow-y: auto; padding: 2rem; border-radius: 4px; position: relative; border: 2px solid #000; }
-        .close-btn { position: absolute; top: 15px; right: 15px; background: #d32f2f; color: #fff; border: none; width: 32px; height: 32px; border-radius: 4px; font-size: 1.5rem; padding: 0; text-align: center; cursor: pointer; font-family: Arial, sans-serif; transition: background 0.2s; display: flex; align-items: center; justify-content: center; line-height: 1; z-index: 10; }
+        
+        /* ★ 修改：紅色 X 關閉按鈕 (無橘色焦點框) ★ */
+        .close-btn { 
+            position: absolute; top: 15px; right: 15px; 
+            background: #d32f2f; color: #fff; border: none; 
+            width: 32px; height: 32px; border-radius: 4px; 
+            font-size: 1.5rem; padding: 0; text-align: center; 
+            cursor: pointer; font-family: Arial, sans-serif; 
+            transition: background 0.2s; 
+            display: flex; align-items: center; justify-content: center; line-height: 1; 
+            z-index: 20;
+        }
         .close-btn:hover { background: #b71c1c; }
-        .close-btn:focus { outline: none; }
+        /* 移除預設的 outline，保持深紅色背景提示 */
+        .close-btn:focus { outline: none; background: #b71c1c; }
+
         .modal-header-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px; padding-right: 40px; }
         .honor-badge { display: inline-flex; align-items: center; gap: 5px; background-color: var(--badge-bg); color: var(--badge-text); padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 1rem; }
         .badge-icon { width: 18px; height: 18px; fill: currentColor; }
         .modal-title-text { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; line-height: 1.4; }
         .modal-body-text { font-size: 1.1rem; line-height: 1.8; color: #333; white-space: pre-wrap; margin-bottom: 30px; }
+        
         .photo-list { list-style: none; padding: 0; margin: 15px 0 0 0; display: flex; flex-wrap: wrap; gap: 15px; }
         .photo-item img { height: 150px; width: auto; max-width: 100%; border: 1px solid #ddd; padding: 3px; object-fit: contain; background: #fff; transition: transform 0.2s; }
         .photo-item img:hover { transform: scale(1.05); border-color: var(--link-color); cursor: pointer; }
+
         #loading { font-size: 1rem; color: #666; padding: 20px; text-align: center; }
+
         @media (max-width: 768px) {
             .honor-item { flex-direction: column; }
             .honor-img-box { width: 100%; height: auto; aspect-ratio: 4 / 3; margin-bottom: 10px; }
@@ -81,20 +178,26 @@
     </style>
 </head>
 <body>
+
 <div class="container">
     <h1 class="sr-only">學校榮譽榜列表</h1>
     <div id="loading" role="status">↻ 榮譽榜載入中...</div>
+    
     <nav id="filter-section" class="filter-section" aria-label="榮譽榜分類篩選">
         <button class="filter-btn active" data-cat="all" style="--btn-color: #337ab7;">全部榮譽</button>
     </nav>
+    
     <ul id="honor-list" class="honor-list" aria-live="polite"></ul>
+    
     <nav aria-label="分頁導航">
         <div id="pagination" class="pagination"></div>
     </nav>
 </div>
+
 <div id="detail-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
     <div class="modal-content">
         <button id="modal-close-btn" class="close-btn" title="關閉">&times;</button>
+
         <div class="modal-header-row">
             <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                 <span class="honor-badge">
@@ -106,8 +209,10 @@
                 </div>
             </div>
         </div>
+
         <h2 id="modal-title-text" class="modal-title-text">公告詳細內容</h2>
         <div id="modal-body-text" class="modal-body-text"></div>
+
         <div id="modal-photos" style="display:none; margin-top: 30px;">
             <div style="margin-bottom: 15px;">
                 <span class="honor-badge">
@@ -119,18 +224,27 @@
         </div>
     </div>
 </div>
+
 <script>
+    // ★ 請確認您的 榮譽榜 GAS 網址 ★
     const DATA_URL = "https://script.google.com/macros/s/AKfycbxlLrGfUegvnoHz7fyBSiytGI9LHF8e7NN9t9grpGV1j0hcRNhkLnMh4lLLRFAzFdv-9Q/exec"; 
     const ITEMS_PER_PAGE = 3; 
+
+    // 預設圖片
     const DEFAULT_IMAGES = [
-        "https://esa.ntpc.edu.tw/web-heromgt/images/default_1.jpg", "https://esa.ntpc.edu.tw/web-heromgt/images/default_2.jpg",
-        "https://esa.ntpc.edu.tw/web-heromgt/images/default_3.jpg", "https://esa.ntpc.edu.tw/web-heromgt/images/default_4.jpg",
+        "https://esa.ntpc.edu.tw/web-heromgt/images/default_1.jpg",
+        "https://esa.ntpc.edu.tw/web-heromgt/images/default_2.jpg",
+        "https://esa.ntpc.edu.tw/web-heromgt/images/default_3.jpg",
+        "https://esa.ntpc.edu.tw/web-heromgt/images/default_4.jpg",
         "https://esa.ntpc.edu.tw/web-heromgt/images/default_5.jpg"
     ];
+
     const HONOR_CAT_CONFIG = {
-        "all": { name: "全部", color: "#337ab7" }, "10": { name: "國際", color: "#f39c12" }, "20": { name: "全國", color: "#00c0ef" },
-        "40": { name: "縣市", color: "#9358ac" }, "50": { name: "區域", color: "#e91e63" }, "60": { name: "全校", color: "#8dc153" },
-        "70": { name: "年級", color: "#00a65a" }, "99": { name: "民間", color: "#e67e22" }
+        "all": { name: "全部", color: "#337ab7" },
+        "10": { name: "國際", color: "#f39c12" }, "20": { name: "全國", color: "#00c0ef" },
+        "40": { name: "縣市", color: "#9358ac" }, "50": { name: "區域", color: "#e91e63" },
+        "60": { name: "全校", color: "#8dc153" }, "70": { name: "年級", color: "#00a65a" },
+        "99": { name: "民間", color: "#e67e22" }
     };
     const HONOR_CAT_ORDER = ["all", "10", "20", "40", "50", "60", "70", "99"];
 
@@ -138,12 +252,14 @@
     let filteredData = [];
     let currentPage = 1;
     let currentCategory = 'all';
-    let lastFocusedElement = null;
+    
+    let activeIntervals = [];
 
     const listContainer = document.getElementById('honor-list');
     const loadingDiv = document.getElementById('loading');
     const paginationDiv = document.getElementById('pagination');
     const filterSection = document.getElementById('filter-section');
+
     const modal = document.getElementById('detail-modal');
     const modalTitleText = document.getElementById('modal-title-text');
     const modalDate = document.getElementById('modal-date');
@@ -153,23 +269,20 @@
     const photoList = document.getElementById('photo-list');
     const closeBtn = document.getElementById('modal-close-btn');
 
-    fetch(DATA_URL)
-        .then(res => res.json())
-        .then(json => {
-            loadingDiv.style.display = 'none';
-            if (json.status !== "success" || !json.data || json.data.length === 0) {
-                listContainer.innerHTML = "<div style='text-align:center; padding:20px'>目前沒有榮譽榜資料。</div>";
-                return;
-            }
-            allData = json.data;
-            filteredData = allData;
-            initFilters();
-            renderPage(1);
-        })
-        .catch(err => {
-            console.error(err);
-            loadingDiv.innerHTML = "<span style='color:red;'>載入失敗，請稍後再試。</span>";
-        });
+    fetch(DATA_URL).then(res => res.json()).then(json => {
+        loadingDiv.style.display = 'none';
+        if (json.status !== "success" || !json.data || json.data.length === 0) {
+            listContainer.innerHTML = "<div style='text-align:center; padding:20px'>目前沒有榮譽榜資料。</div>";
+            return;
+        }
+        allData = json.data;
+        filteredData = allData;
+        initFilters();
+        renderPage(1);
+    }).catch(err => {
+        console.error(err);
+        loadingDiv.innerHTML = "<span style='color:red;'>載入失敗，請稍後再試。</span>";
+    });
 
     function initFilters() {
         const counts = { "all": allData.length };
@@ -178,10 +291,7 @@
         HONOR_CAT_ORDER.forEach(catId => {
             if (HONOR_CAT_CONFIG[catId]) {
                 const count = counts[catId] || 0;
-                // ★ 修改：如果是 "all" 或數量 > 0 才顯示 ★
-                if (catId === 'all' || count > 0) {
-                    createFilterBtn(catId, count);
-                }
+                if (catId === 'all' || count > 0) createFilterBtn(catId, count);
             }
         });
     }
@@ -204,43 +314,160 @@
 
     function applyFilter(catId) {
         currentCategory = catId;
-        if (catId === 'all') { filteredData = allData; } else { filteredData = allData.filter(item => item.category_id == catId); }
+        filteredData = (catId === 'all') ? allData : allData.filter(item => item.category_id == catId);
         currentPage = 1;
         renderPage(1);
     }
 
+    function clearCarousels() {
+        activeIntervals.forEach(clearInterval);
+        activeIntervals = [];
+    }
+
     function renderPage(page) {
+        clearCarousels();
         currentPage = page;
         listContainer.innerHTML = "";
+        
         if (filteredData.length === 0) {
             listContainer.innerHTML = "<div style='text-align:center; padding:20px; color:#666;'>此分類無資料</div>";
             paginationDiv.innerHTML = "";
             return;
         }
+
         const start = (page - 1) * ITEMS_PER_PAGE;
         const end = start + ITEMS_PER_PAGE;
         const pageItems = filteredData.slice(start, end);
+
         pageItems.forEach((item, index) => {
+            const dataIndex = start + index;
             const li = document.createElement('li');
             li.className = 'honor-item';
+            
             const d = item.date;
             const dateStr = d ? (d.length === 8 ? `${d.substring(0,4)}-${d.substring(4,6)}-${d.substring(6,8)}` : d) : '';
             const catConfig = HONOR_CAT_CONFIG[item.category_id] || { name: item.category_name || "榮譽", color: "#999" };
-            let imgSrc = '';
-            if (item.images && item.images.length > 0) { imgSrc = item.images[0].url; } else { const idNum = parseInt(item.id, 10) || 0; const defaultIndex = idNum % 5; imgSrc = DEFAULT_IMAGES[defaultIndex]; }
-            const imgHtml = `<div class="honor-img-box"><button onclick="openDetails(${start + index})" title="查看詳情：${item.title}"><img src="${imgSrc}" class="honor-thumb" alt="${item.title} 的活動照片"></button></div>`;
-            const contentId = `desc-${item.id}`; const btnId = `btn-${item.id}`; const maxChars = 70; 
-            let descHtml = ''; let moreBtnHtml = '';
+            
+            let imgHtml = '';
+            const images = item.images || [];
+            
+            if (images.length > 1) {
+                const carouselId = `mc-${item.id}-${index}`;
+                const slidesHtml = images.map((img, i) => `
+                    <div class="mc-slide ${i === 0 ? 'active' : ''}" data-idx="${i}" onclick="openDetails(${dataIndex})">
+                        <img src="${img.url}" alt="${item.title} (照片 ${i+1}/${images.length})">
+                    </div>
+                `).join('');
+
+                imgHtml = `
+                    <div class="honor-img-box">
+                        <div class="mini-carousel" id="${carouselId}" onmouseenter="pauseMC('${carouselId}')" onmouseleave="resumeMC('${carouselId}')">
+                            <button class="mc-control mc-play-btn" onclick="toggleMC('${carouselId}', event)" aria-label="暫停輪播" title="暫停輪播">⏸</button>
+                            <button class="mc-control mc-nav-btn mc-prev" onclick="prevMC('${carouselId}', event)" aria-label="上一張" title="上一張">❮</button>
+                            <button class="mc-control mc-nav-btn mc-next" onclick="nextMC('${carouselId}', event)" aria-label="下一張" title="下一張">❯</button>
+                            ${slidesHtml}
+                        </div>
+                    </div>
+                `;
+                setTimeout(() => initMC(carouselId, images.length), 0);
+
+            } else {
+                let imgSrc = '';
+                if (images.length === 1) {
+                    imgSrc = images[0].url;
+                } else {
+                    const idNum = parseInt(item.id, 10) || 0;
+                    imgSrc = DEFAULT_IMAGES[idNum % 5];
+                }
+                
+                imgHtml = `
+                    <div class="honor-img-box">
+                        <button class="honor-static-btn" onclick="openDetails(${dataIndex})" title="查看詳情：${item.title}">
+                            <img src="${imgSrc}" class="honor-thumb" alt="${item.title}">
+                        </button>
+                    </div>`;
+            }
+
+            const contentId = `desc-${item.id}`; const btnId = `btn-${item.id}`; const maxChars = 70;
+            let descHtml = `<div class="honor-desc">${item.content || ''}</div>`;
+            let moreBtnHtml = '';
             if (item.content && item.content.length > maxChars) {
                 descHtml = `<div id="${contentId}" class="honor-desc desc-truncated">${item.content}</div>`;
                 moreBtnHtml = `<button id="${btnId}" class="show-more-btn" onclick="toggleMore('${contentId}', '${btnId}')" title="展開更多內容">顯示更多內容...</button>`;
-            } else { descHtml = `<div class="honor-desc">${item.content || ''}</div>`; }
-            li.innerHTML = `${imgHtml}<div class="honor-content-box"><div class="honor-title-row"><button class="title-btn" onclick="openDetails(${start + index})" title="查看詳情：${item.title}">${item.title}</button></div>${descHtml}${moreBtnHtml}<div class="honor-meta"><span class="tag-badge" style="background-color:${catConfig.color}; color:#fff;" title="分類：${catConfig.name}"><span class="sr-only">分類：</span>${catConfig.name}</span><span class="tag-badge tag-dept" title="發布單位：${item.dept}"><span class="sr-only">發布單位：</span>${item.dept}</span><span style="margin-left:auto;">${dateStr}</span></div></div>`;
+            }
+
+            li.innerHTML = `
+                ${imgHtml}
+                <div class="honor-content-box">
+                    <div class="honor-title-row">
+                        <button class="title-btn" onclick="openDetails(${dataIndex})" title="查看詳情：${item.title}">
+                            ${item.title}
+                        </button>
+                    </div>
+                    ${descHtml} ${moreBtnHtml}
+                    <div class="honor-meta">
+                        <span class="tag-badge" style="background-color:${catConfig.color}; color:#fff;" title="分類：${catConfig.name}"><span class="sr-only">分類：</span>${catConfig.name}</span>
+                        <span class="tag-badge tag-dept" title="發布單位：${item.dept}"><span class="sr-only">發布單位：</span>${item.dept}</span>
+                        <span style="margin-left:auto;">${dateStr}</span>
+                    </div>
+                </div>
+            `;
             listContainer.appendChild(li);
         });
+
         renderPagination();
         window.scrollTo(0, 0);
     }
+
+    const mcState = {}; 
+
+    function initMC(id, total) {
+        mcState[id] = { current: 0, total: total, interval: null, playing: true };
+        startMC(id);
+    }
+
+    function startMC(id) {
+        if (mcState[id].interval) clearInterval(mcState[id].interval);
+        mcState[id].interval = setInterval(() => changeSlideMC(id, 1), 3000);
+        activeIntervals.push(mcState[id].interval);
+    }
+
+    function stopMC(id) {
+        if (mcState[id] && mcState[id].interval) {
+            clearInterval(mcState[id].interval);
+            mcState[id].interval = null;
+        }
+    }
+
+    function changeSlideMC(id, step) {
+        const state = mcState[id];
+        if (!state) return;
+        const container = document.getElementById(id);
+        if(!container) return; 
+        const slides = container.querySelectorAll('.mc-slide');
+        slides[state.current].classList.remove('active');
+        state.current = (state.current + step + state.total) % state.total;
+        slides[state.current].classList.add('active');
+    }
+
+    window.pauseMC = function(id) { stopMC(id); };
+    window.resumeMC = function(id) { if (mcState[id] && mcState[id].playing) startMC(id); };
+
+    window.prevMC = function(id, e) { e.stopPropagation(); changeSlideMC(id, -1); };
+    window.nextMC = function(id, e) { e.stopPropagation(); changeSlideMC(id, 1); };
+
+    window.toggleMC = function(id, e) {
+        e.stopPropagation();
+        const state = mcState[id];
+        const btn = e.currentTarget;
+        if (state.playing) {
+            state.playing = false; stopMC(id);
+            btn.innerText = "▶"; btn.setAttribute('aria-label', "播放輪播"); btn.title = "播放輪播";
+        } else {
+            state.playing = true; startMC(id);
+            btn.innerText = "⏸"; btn.setAttribute('aria-label', "暫停輪播"); btn.title = "暫停輪播";
+        }
+    };
 
     window.toggleMore = function(contentId, btnId) {
         const content = document.getElementById(contentId);
@@ -250,17 +477,23 @@
 
     window.openDetails = function(index) {
         const item = filteredData[index];
-        lastFocusedElement = document.activeElement;
         modalTitleText.textContent = item.title;
         modalBodyText.textContent = item.content;
         const d = item.date;
         const dateStr = d ? (d.length === 8 ? `${d.substring(0,4)}-${d.substring(4,6)}-${d.substring(6,8)}` : d) : '';
         modalDate.textContent = dateStr;
         modalDept.textContent = item.dept;
+
         if (item.images && item.images.length > 0) {
             modalPhotos.style.display = 'block';
-            photoList.innerHTML = item.images.map(img => `<li class="photo-item"><a href="${img.url}" target="_blank" download title="下載原圖：${item.title}"><img src="${img.url}" alt="競賽照片：${item.title}"></a></li>`).join('');
+            photoList.innerHTML = item.images.map(img => `
+                <li class="photo-item">
+                    <a href="${img.url}" target="_blank" download title="下載原圖：${item.title}">
+                        <img src="${img.url}" alt="競賽照片">
+                    </a>
+                </li>`).join('');
         } else { modalPhotos.style.display = 'none'; }
+        
         modal.style.display = 'flex';
         closeBtn.focus(); 
         document.body.style.overflow = 'hidden'; 
@@ -269,7 +502,7 @@
     function closeModal() {
         modal.style.display = 'none';
         document.body.style.overflow = '';
-        if (lastFocusedElement) lastFocusedElement.focus();
+        if (document.activeElement) document.activeElement.blur(); 
     }
 
     closeBtn.addEventListener('click', closeModal);
@@ -308,5 +541,6 @@
         }
     }
 </script>
+
 </body>
 </html>
