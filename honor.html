@@ -15,7 +15,7 @@
             --bg-color: transparent; 
             --text-color: #222222;
             --link-color: #0044cc;
-            --focus-outline: 0.25rem solid #ffcc00;
+            --focus-outline: 0.25rem solid #ffcc00; /* 高對比焦點框 */
             --modal-overlay: rgba(0, 0, 0, 0.7);
             
             /* 黃色標籤配色 */
@@ -64,6 +64,8 @@
         }
 
         .filter-btn:hover { background-color: rgba(0,0,0,0.05); }
+        /* 按鈕焦點樣式 */
+        .filter-btn:focus { outline: var(--focus-outline); background-color: #000 !important; color: #ffcc00 !important; border-color: #ffcc00 !important; }
 
         .filter-btn.active {
             background-color: var(--btn-color, #333);
@@ -99,16 +101,22 @@
         .honor-img-box button { width: 100%; height: 100%; padding: 0; border: none; background: none; cursor: pointer; }
         .honor-thumb { width: 100%; height: 100%; object-fit: cover; border: 1px solid #ddd; padding: 3px; background: #fff; display: block; }
         
+        /* ★ 新增：圖片按鈕焦點樣式 (Tab 到圖片時也會有黃框) ★ */
+        .honor-img-box button:focus { outline: var(--focus-outline); }
+
         /* 內容區 */
         .honor-content-box { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; }
         
         .honor-title-row { margin-bottom: 8px; }
+        
+        /* ★ 修改：補上焦點樣式 (Tab 到標題時變黑底黃字) ★ */
         .title-btn {
             background: none; border: none; padding: 0; font-size: 1.25rem; 
             color: #333; text-align: left; cursor: pointer; font-family: inherit;
             line-height: 1.4; text-decoration: none; font-weight: bold;
         }
         .title-btn:hover { color: var(--link-color); text-decoration: underline; }
+        .title-btn:focus { outline: var(--focus-outline); background-color: #000; color: #ffcc00; text-decoration: underline; }
         
         /* 內容截斷 */
         .honor-desc { 
@@ -124,6 +132,7 @@
             text-align: left; display: inline-block; margin-bottom: 10px;
         }
         .show-more-btn:hover { text-decoration: underline; }
+        .show-more-btn:focus { outline: var(--focus-outline); background-color: #000; color: #ffcc00; }
         
         /* 底部資訊列 */
         .honor-meta { margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.9rem; color: #666; }
@@ -142,12 +151,14 @@
         .page-btn:hover { background-color: #eee; }
         .page-btn.active { background-color: var(--link-color); color: #fff; border-color: var(--link-color); }
         .page-btn:disabled { color: #ccc; cursor: not-allowed; }
+        /* 分頁焦點 */
+        .page-btn:focus { outline: var(--focus-outline); background-color: #000; color: #ffcc00; border-color: #ffcc00; }
 
         /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 9999; }
         .modal-content { background: #fff; width: 95%; max-width: 60rem; max-height: 90vh; overflow-y: auto; padding: 2rem; border-radius: 4px; position: relative; border: 2px solid #000; }
         
-        /* ★ 修改：改回紅色 X 按鈕樣式 ★ */
+        /* 關閉按鈕 */
         .close-btn { 
             position: absolute; top: 15px; right: 15px; 
             background: #d32f2f; color: #fff; border: none; 
@@ -159,6 +170,7 @@
             z-index: 10;
         }
         .close-btn:hover { background: #b71c1c; }
+        .close-btn:focus { outline: var(--focus-outline); box-shadow: 0 0 0 4px #000; }
 
         .modal-header-row { 
             display: flex; justify-content: space-between; align-items: center; 
@@ -166,7 +178,6 @@
             padding-right: 40px; 
         }
         
-        /* 黃色標籤 */
         .honor-badge { display: inline-flex; align-items: center; gap: 5px; background-color: var(--badge-bg); color: var(--badge-text); padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 1rem; }
         .badge-icon { width: 18px; height: 18px; fill: currentColor; }
         
@@ -242,6 +253,7 @@
     const DATA_URL = "https://script.google.com/macros/s/AKfycbxlLrGfUegvnoHz7fyBSiytGI9LHF8e7NN9t9grpGV1j0hcRNhkLnMh4lLLRFAzFdv-9Q/exec"; 
     const ITEMS_PER_PAGE = 3; 
 
+    // 預設圖片
     const DEFAULT_IMAGES = [
         "https://esa.ntpc.edu.tw/web-heromgt/images/default_1.jpg",
         "https://esa.ntpc.edu.tw/web-heromgt/images/default_2.jpg",
