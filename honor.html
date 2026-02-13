@@ -15,7 +15,7 @@
             --bg-color: transparent; 
             --text-color: #222222;
             --link-color: #0044cc;
-            --focus-outline: 0.25rem solid #ffcc00; /* 高對比焦點框 */
+            --focus-outline: 0.25rem solid #ffcc00; /* 其他元件的焦點色 */
             --modal-overlay: rgba(0, 0, 0, 0.7);
             
             /* 黃色標籤配色 */
@@ -64,7 +64,7 @@
         }
 
         .filter-btn:hover { background-color: rgba(0,0,0,0.05); }
-        /* 按鈕焦點樣式 */
+        /* 其他按鈕保持黃色焦點框 */
         .filter-btn:focus { outline: var(--focus-outline); background-color: #000 !important; color: #ffcc00 !important; border-color: #ffcc00 !important; }
 
         .filter-btn.active {
@@ -100,8 +100,6 @@
         
         .honor-img-box button { width: 100%; height: 100%; padding: 0; border: none; background: none; cursor: pointer; }
         .honor-thumb { width: 100%; height: 100%; object-fit: cover; border: 1px solid #ddd; padding: 3px; background: #fff; display: block; }
-        
-        /* ★ 新增：圖片按鈕焦點樣式 (Tab 到圖片時也會有黃框) ★ */
         .honor-img-box button:focus { outline: var(--focus-outline); }
 
         /* 內容區 */
@@ -109,7 +107,6 @@
         
         .honor-title-row { margin-bottom: 8px; }
         
-        /* ★ 修改：補上焦點樣式 (Tab 到標題時變黑底黃字) ★ */
         .title-btn {
             background: none; border: none; padding: 0; font-size: 1.25rem; 
             color: #333; text-align: left; cursor: pointer; font-family: inherit;
@@ -151,14 +148,13 @@
         .page-btn:hover { background-color: #eee; }
         .page-btn.active { background-color: var(--link-color); color: #fff; border-color: var(--link-color); }
         .page-btn:disabled { color: #ccc; cursor: not-allowed; }
-        /* 分頁焦點 */
         .page-btn:focus { outline: var(--focus-outline); background-color: #000; color: #ffcc00; border-color: #ffcc00; }
 
         /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 9999; }
         .modal-content { background: #fff; width: 95%; max-width: 60rem; max-height: 90vh; overflow-y: auto; padding: 2rem; border-radius: 4px; position: relative; border: 2px solid #000; }
         
-        /* 關閉按鈕 */
+        /* ★ 修改：關閉按鈕樣式 (紅色X，移除額外橘色框) ★ */
         .close-btn { 
             position: absolute; top: 15px; right: 15px; 
             background: #d32f2f; color: #fff; border: none; 
@@ -170,7 +166,8 @@
             z-index: 10;
         }
         .close-btn:hover { background: #b71c1c; }
-        .close-btn:focus { outline: var(--focus-outline); box-shadow: 0 0 0 4px #000; }
+        /* 移除 focus 時的橘色大光圈，改為無或預設，避免「多一個圈」 */
+        .close-btn:focus { outline: none; }
 
         .modal-header-row { 
             display: flex; justify-content: space-between; align-items: center; 
