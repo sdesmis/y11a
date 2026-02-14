@@ -11,13 +11,13 @@
     // --- 1. CSS 樣式 (榮譽榜專用) ---
     const styles = `
         :root {
-            /* 雖然這裡定義了黃色框，但在下方按鈕我們會把它覆蓋掉 */
             --hr-focus-outline: 0.25rem solid #ffcc00; 
             --hr-link: #0044cc;
             --hr-badge-bg: #fff59d; 
             --hr-badge-text: #5d4037; 
             --hr-tag-bg: #f0f0f0;
-            /* ★ 確保 Iansui 排第一順位 ★ */
+            /* ★ 補回背景變灰的變數 ★ */
+            --hr-modal-overlay: rgba(0, 0, 0, 0.7);
             --hr-font: "Iansui", "Microsoft JhengHei", sans-serif;
         }
         #honor-root { width: 100%; font-family: var(--hr-font); line-height: 1.5; color: #222; }
@@ -44,13 +44,11 @@
         
         .hr-btn:hover { background: rgba(0,0,0,0.05); }
         
-        /* 啟用狀態 */
         .hr-btn.active { 
             background: var(--btn-color,#333); 
             color: #fff; 
         }
         
-        /* 焦點狀態 (完全移除外框) */
         .hr-btn:focus { 
             outline: none; 
             box-shadow: none;
@@ -113,8 +111,12 @@
         .hr-pg-btn:disabled { color: #ccc; cursor: not-allowed; }
         .hr-pg-btn:focus { outline: var(--hr-focus-outline); background: #000; color: #ffcc00; border-color: #ffcc00; }
 
-        /* Modal */
-        .hr-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 99999; }
+        /* Modal 全螢幕與背景變灰 */
+        .hr-modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: var(--hr-modal-overlay); /* ★ 這裡引用了修正後的變數 ★ */
+            display: none; justify-content: center; align-items: center; z-index: 99999; 
+        }
         .hr-modal-content { background: #fff; width: 95%; max-width: 60rem; max-height: 90vh; overflow-y: auto; padding: 2rem; border-radius: 4px; border: 2px solid #000; position: relative; }
         
         .hr-close { 
