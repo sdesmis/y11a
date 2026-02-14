@@ -69,14 +69,25 @@
             flex-shrink: 0; 
             width: 220px; height: 155px; 
             position: relative; 
-            background: #f9f9f9;
+            background: #fff; /* 背景改為白色，配合縮放後的圖片 */
             border: 1px solid #ddd;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
         }
         
         /* 靜態圖片按鈕 */
         .honor-static-btn { width: 100%; height: 100%; padding: 0; border: none; background: none; cursor: pointer; display: block; }
-        .honor-thumb { width: 100%; height: 100%; object-fit: cover; padding: 3px; background: #fff; display: block; }
         .honor-static-btn:focus { outline: var(--focus-outline); }
+
+        /* ★ 修改重點 1：靜態圖片改為 contain (完整顯示不裁切) ★ */
+        .honor-thumb { 
+            width: 100%; height: 100%; 
+            object-fit: contain; /* 關鍵修改：確保圖片完整顯示 */
+            padding: 3px; 
+            background: #fff; 
+            display: block; 
+        }
 
         /* 列表輪播樣式 */
         .mini-carousel { width: 100%; height: 100%; position: relative; overflow: hidden; }
@@ -86,9 +97,17 @@
             position: absolute; top: 0; left: 0;
             display: none; 
             cursor: pointer;
+            background: #fff; /* 確保縮放時背景是白的 */
         }
         .mc-slide.active { display: block; }
-        .mc-slide img { width: 100%; height: 100%; object-fit: cover; padding: 3px; background: #fff; }
+        
+        /* ★ 修改重點 2：輪播圖片也改為 contain ★ */
+        .mc-slide img { 
+            width: 100%; height: 100%; 
+            object-fit: contain; /* 關鍵修改 */
+            padding: 3px; 
+            background: #fff; 
+        }
 
         .mc-control {
             position: absolute;
@@ -141,7 +160,6 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 9999; }
         .modal-content { background: #fff; width: 95%; max-width: 60rem; max-height: 90vh; overflow-y: auto; padding: 2rem; border-radius: 4px; position: relative; border: 2px solid #000; }
         
-        /* ★ 修改：紅色 X 關閉按鈕 (無橘色焦點框) ★ */
         .close-btn { 
             position: absolute; top: 15px; right: 15px; 
             background: #d32f2f; color: #fff; border: none; 
@@ -153,8 +171,7 @@
             z-index: 20;
         }
         .close-btn:hover { background: #b71c1c; }
-        /* 移除預設的 outline，保持深紅色背景提示 */
-        .close-btn:focus { outline: none; background: #b71c1c; }
+        .close-btn:focus { outline: none; background: #b71c1c; } /* 無外框 */
 
         .modal-header-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px; padding-right: 40px; }
         .honor-badge { display: inline-flex; align-items: center; gap: 5px; background-color: var(--badge-bg); color: var(--badge-text); padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 1rem; }
