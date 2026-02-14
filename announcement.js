@@ -156,7 +156,7 @@
     // --- 3. 程式邏輯 ---
     const DATA_URL = "https://script.google.com/macros/s/AKfycbwpj87uChIU27uvVX_ssWMBRxrreL8OzGp5i3W5GoUdpThqQukqvrpajAsazAM9dC9C/exec";
     const LOCKED_CATEGORY_ID = null; 
-    const ITEMS_PER_PAGE = 13;
+    const ITEMS_PER_PAGE = 10;
     const NEW_DAYS_LIMIT = 4;
 
     const IMG_TOP = `<img src="https://esa.ntpc.edu.tw/web-announce/images/top.png" alt="置頂" class="ann-icon-img icon-top" style="height:18px !important; width:auto !important; margin-right:4px; vertical-align:middle;">`;
