@@ -16,7 +16,6 @@
             --hr-badge-bg: #fff59d; 
             --hr-badge-text: #5d4037; 
             --hr-tag-bg: #f0f0f0;
-            /* ★ 補回背景變灰的變數 ★ */
             --hr-modal-overlay: rgba(0, 0, 0, 0.7);
             --hr-font: "Iansui", "Microsoft JhengHei", sans-serif;
         }
@@ -26,33 +25,17 @@
         .hr-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
         .hr-container { padding: 0 5px; }
         
-        /* 分類按鈕樣式 */
+        /* 分類按鈕 */
         .hr-filter-sec { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; }
         
         .hr-btn { 
-            background: #fff; 
-            border: 2px solid var(--btn-color,#333); 
-            color: var(--btn-color,#333); 
-            padding: 4px 10px; 
-            font-size: 0.95rem; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            transition: all 0.2s; 
-            display: inline-flex; align-items: center; gap: 6px;
+            background: #fff; border: 2px solid var(--btn-color,#333); color: var(--btn-color,#333); 
+            padding: 4px 10px; font-size: 0.95rem; border-radius: 4px; cursor: pointer; font-weight: bold; 
+            transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
         }
-        
         .hr-btn:hover { background: rgba(0,0,0,0.05); }
-        
-        .hr-btn.active { 
-            background: var(--btn-color,#333); 
-            color: #fff; 
-        }
-        
-        .hr-btn:focus { 
-            outline: none; 
-            box-shadow: none;
-        }
+        .hr-btn.active { background: var(--btn-color,#333); color: #fff; }
+        .hr-btn:focus { outline: none; box-shadow: none; }
         
         .hr-count { background: #eee; color: #555; font-size: 0.85em; padding: 1px 6px; border-radius: 4px; min-width: 20px; text-align: center; }
         .hr-btn.active .hr-count { color: #333; background: rgba(255,255,255,0.8); }
@@ -61,7 +44,7 @@
         .hr-list { list-style: none; padding: 0; margin: 0; }
         .hr-item { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid #eee; }
         
-        /* 圖片容器與輪播 */
+        /* 圖片容器 */
         .hr-img-box { 
             flex-shrink: 0; width: 220px; height: 155px; 
             position: relative; background: #fff; border: 1px solid #ddd; 
@@ -103,20 +86,22 @@
         .hr-tag { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem; cursor: default; }
         .hr-tag-dept { background: var(--hr-tag-bg); color: #333; }
 
-        /* 分頁 */
-        .hr-pager { display: flex; justify-content: center; gap: 5px; margin: 25px 0 20px; }
+        /* ★ 分頁 (關鍵修正：加入 flex-wrap) ★ */
+        .hr-pager { 
+            display: flex; 
+            justify-content: center; 
+            gap: 5px; 
+            margin: 25px 0 20px; 
+            flex-wrap: wrap; /* 這行讓手機版按鈕可以自動換行 */
+        }
         .hr-pg-btn { padding: 8px 12px; border: 1px solid #ddd; background: #fff; color: var(--hr-link); cursor: pointer; border-radius: 4px; font-weight: bold; }
         .hr-pg-btn:hover { background: #eee; }
         .hr-pg-btn.active { background: var(--hr-link); color: #fff; border-color: var(--hr-link); }
         .hr-pg-btn:disabled { color: #ccc; cursor: not-allowed; }
         .hr-pg-btn:focus { outline: var(--hr-focus-outline); background: #000; color: #ffcc00; border-color: #ffcc00; }
 
-        /* Modal 全螢幕與背景變灰 */
-        .hr-modal-overlay { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: var(--hr-modal-overlay); /* ★ 這裡引用了修正後的變數 ★ */
-            display: none; justify-content: center; align-items: center; z-index: 99999; 
-        }
+        /* Modal */
+        .hr-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--hr-modal-overlay); display: none; justify-content: center; align-items: center; z-index: 99999; }
         .hr-modal-content { background: #fff; width: 95%; max-width: 60rem; max-height: 90vh; overflow-y: auto; padding: 2rem; border-radius: 4px; border: 2px solid #000; position: relative; }
         
         .hr-close { 
