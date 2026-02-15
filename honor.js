@@ -54,7 +54,12 @@
         .hr-tag { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem; cursor: default; }
         .hr-tag-dept { background: var(--hr-tag-bg); color: #333; }
         .hr-pager { display: flex; justify-content: center; gap: 5px; margin: 25px 0 20px; flex-wrap: wrap; }
-        .hr-pg-btn { padding: 8px 12px; border: 1px solid #ddd; background: #fff; color: var(--hr-link); cursor: pointer; border-radius: 4px; font-weight: bold; }
+        /* ★ 修改：分頁按鈕字體改為 1rem，最小寬度 35px (與公告統一) ★ */
+        .hr-pg-btn { 
+            padding: 8px 12px; border: 1px solid #ddd; background: #fff; color: var(--hr-link); 
+            cursor: pointer; border-radius: 4px; font-weight: bold; 
+            font-size: 1rem; min-width: 35px;
+        }
         .hr-pg-btn:hover { background: #eee; }
         .hr-pg-btn.active { background: var(--hr-link); color: #fff; border-color: var(--hr-link); }
         .hr-pg-btn:disabled { color: #ccc; cursor: not-allowed; }
@@ -127,7 +132,6 @@
                 const btn = document.createElement('button');
                 btn.className = `hr-btn ${id==='all'?'active':''}`;
                 btn.style.setProperty('--btn-color', CAT_CONF[id].color);
-                // ★ 修正：加上 title
                 btn.title = `篩選分類：${CAT_NAME[id]}，共 ${cnt[id]||0} 則`;
                 btn.innerHTML = `${CAT_NAME[id]} <span class="hr-count">${cnt[id]||0}</span>`;
                 btn.onclick = () => { document.querySelectorAll('.hr-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); applyFilter(id); };
@@ -148,7 +152,6 @@
             let imgHtml = ""; const imgs = item.images||[];
             if(imgs.length > 1) {
                 const mid = `hr-mc-${item.id}-${idx}`;
-                // ★ 修正：加上 title (輪播圖點擊)
                 const slides = imgs.map((m,i)=>`<div class="hr-mc-slide ${i===0?'active':''}" onclick="window.hrOpen(${start+idx})" title="查看詳情：${item.title}"><img src="${m.url}" alt="${item.title} 照片 ${i+1}"></div>`).join('');
                 imgHtml = `<div class="hr-img-box"><div class="hr-mc" id="${mid}" onmouseenter="window.hrPause('${mid}')" onmouseleave="window.hrResume('${mid}')">
                     <button class="hr-mc-ctl hr-play" onclick="window.hrToggle('${mid}',event)" aria-label="暫停輪播" title="暫停/播放">⏸</button>
@@ -158,7 +161,6 @@
                 setTimeout(()=>initMC(mid, imgs.length),0);
             } else {
                 let src = (imgs.length===1) ? imgs[0].url : DEF_IMGS[(parseInt(item.id)||0)%5];
-                // ★ 修正：加上 title
                 imgHtml = `<div class="hr-img-box"><button class="hr-static-btn" onclick="window.hrOpen(${start+idx})" title="查看詳情：${item.title}"><img src="${src}" class="hr-thumb" alt="${item.title}"></button></div>`;
             }
             const descId = `desc-${item.id}`, btnId = `btn-${item.id}`;
@@ -167,7 +169,6 @@
                 desc = `<div id="${descId}" class="hr-desc hr-trunc">${item.content}</div>`;
                 more = `<button id="${btnId}" class="hr-more" onclick="window.hrMore('${descId}','${btnId}')" title="顯示更多內容">顯示更多...</button>`;
             }
-            // ★ 修正：加上 title (標題按鈕)
             li.innerHTML = `${imgHtml}<div class="hr-content"><div class="hr-title-row"><button class="hr-title-btn" onclick="window.hrOpen(${start+idx})" title="查看詳情：${item.title}">${item.title}</button></div>${desc}${more}<div class="hr-meta"><span class="hr-tag" style="background:${catColor};color:#fff">${catName}</span><span class="hr-tag hr-tag-dept">${item.dept}</span><span style="margin-left:auto">${date}</span></div></div>`;
             el.list.appendChild(li);
         });
@@ -187,7 +188,6 @@
         const i = filteredData[idx]; el.mTitle.innerText = i.title; el.mBody.innerText = i.content; el.mDate.innerText = i.date; el.mDept.innerText = i.dept;
         if(i.images && i.images.length>0) {
             el.mPhotos.style.display='block';
-            // ★ 修正：加上 title (彈窗下載)
             el.pList.innerHTML = i.images.map(m=>`<li class="hr-photo-item"><a href="${m.url}" target="_blank" title="下載原圖：${i.title}"><img src="${m.url}" alt="${i.title}"></a></li>`).join('');
         } else el.mPhotos.style.display='none';
         el.modal.style.display='flex'; el.mClose.focus(); document.body.style.overflow='hidden';
@@ -198,7 +198,6 @@
         el.pager.innerHTML=""; const tot = Math.ceil(filteredData.length/ITEMS_PER_PAGE); if(tot<=1) return;
         const mkBtn = (t,d,g,lbl) => { 
             const b=document.createElement('button'); b.className=`hr-pg-btn ${t==curPage?'active':''}`; b.innerText=t; b.disabled=d; b.onclick=()=>renderPage(g); 
-            // 補上 aria-label
             if(lbl) b.setAttribute('aria-label', lbl); else b.setAttribute('aria-label', `第 ${t} 頁`);
             el.pager.appendChild(b); 
         };
