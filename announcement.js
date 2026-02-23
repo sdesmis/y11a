@@ -116,7 +116,7 @@
     const LOCKED_CATEGORY_ID = null; const ITEMS_PER_PAGE = 10; const NEW_DAYS_LIMIT = 4;
     const IMG_TOP = `<img src="https://esa.ntpc.edu.tw/web-announce/images/top.png" alt="置頂" class="ann-icon-img icon-top" style="height:18px !important; width:auto !important; margin-right:4px; vertical-align:middle;">`;
     const IMG_NEW = `<img src="https://esa.ntpc.edu.tw/web-announce/images/news.svg" alt="最新" class="ann-icon-img icon-new" style="height:18px !important; width:auto !important; margin-left:6px; vertical-align:middle;">`;
-    const CAT_MAP = { "2": "行政公告", "28": "補助及獎助學金", "29": "人事室公告", "30": "主計室公告", "31": "家長專區", "35": "性別平等", "36": "人權二公約", "37": "校內公告", "38": "人員甄選", "39": "幼兒園", "48": "體育賽事、活動", "156": "新生報到專區", "168": "安全棒球", "7": "研習公告", "34": "防疫專區" };
+    const CAT_MAP = { "2": "行政公告", "28": "補助及獎助學金", "29": "人事室公告", "30": "會計室公告", "31": "家長專區", "35": "性別平等", "36": "人權二公約", "37": "校內公告", "38": "人員甄選", "39": "幼兒園", "48": "體育賽事、活動", "156": "新生報到專區", "168": "安全棒球", "7": "研習公告", "34": "防疫專區" };
     const CAT_CONFIG = { "2": { color: "#8B4513" }, "28": { color: "#0056b3" }, "29": { color: "#800080" }, "30": { color: "#A0522D" }, "31": { color: "#006666" }, "35": { color: "#800040" }, "36": { color: "#006400" }, "37": { color: "#0044cc" }, "38": { color: "#5d4037" }, "39": { color: "#556B2F" }, "48": { color: "#2F4F4F" }, "156": { color: "#8B4513" }, "168": { color: "#4682B4" }, "7": { color: "#800000" }, "34": { color: "#e65100" } };
     const CAT_ORDER = ["2", "28", "29", "30", "31", "35", "36", "37", "38", "39", "48", "156", "168", "7"];
     const DEPT_LIST = ["校長室", "教務處", "學務處", "總務處", "輔導處", "人事室", "會計室", "幼兒園"];
