@@ -111,7 +111,7 @@
     const DATA_URL = "https://script.google.com/macros/s/AKfycbwpj87uChIU27uvVX_ssWMBRxrreL8OzGp5i3W5GoUdpThqQukqvrpajAsazAM9dC9C/exec";
     const LOCKED_CATEGORY_ID = null; const ITEMS_PER_PAGE = 10; const NEW_DAYS_LIMIT = 4;
     const IMG_TOP = `<img src="https://esa.ntpc.edu.tw/web-announce/images/top.png" alt="置頂" class="ann-icon-img icon-top" style="height:18px !important; width:auto !important; margin-right:4px; vertical-align:middle;">`;
-    const IMG_NEW = `<img src="https://esa.ntpc.edu.tw/web-announce/images/new.svg" alt="最新" class="ann-icon-img icon-new" style="height:18px !important; width:auto !important; margin-left:6px; vertical-align:middle;">`;
+    const IMG_NEW = `<img src="https://esa.ntpc.edu.tw/web-announce/images/news.svg" alt="最新" class="ann-icon-img icon-new" style="height:18px !important; width:auto !important; margin-left:6px; vertical-align:middle;">`;
     
     // ★ 自訂名稱對照表 ★
     const CUSTOM_NAME_MAP = {
