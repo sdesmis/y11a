@@ -1,5 +1,4 @@
 (function() {
-    // 0. 自動載入字型
     if (!document.getElementById('font-iansui')) {
         const link1 = document.createElement('link'); link1.rel = 'preconnect'; link1.href = 'https://fonts.googleapis.com';
         const link2 = document.createElement('link'); link2.rel = 'preconnect'; link2.href = 'https://fonts.gstatic.com'; link2.crossOrigin = true;
@@ -8,7 +7,6 @@
         document.head.appendChild(link1); document.head.appendChild(link2); document.head.appendChild(link3);
     }
 
-    // 1. CSS
     const styles = `
         :root {
             --ann-bg-color: transparent; --ann-text-color: #222222; --ann-link-color: #0044cc;
@@ -27,7 +25,7 @@
         .ann-filter-btn:hover { background-color: rgba(0,0,0,0.05); }
         .ann-filter-btn.active { background-color: var(--btn-color, #333); color: #fff; }
         .ann-count { background-color: #eee; color: #555; font-size: 0.85em; padding: 1px 6px; border-radius: 4px; min-width: 20px; text-align: center; }
-        .ann-filter-btn.active .ann-count { color: #333; background-color: rgba(255,255,255,0.8); }
+        .ann-filter-btn.active .ann-count { color: #333; background: rgba(255,255,255,0.8); }
         .ann-search-btn { background-color: #005A8C; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 1rem; font-weight: bold; display: flex; align-items: center; gap: 5px; }
         .ann-search-btn:hover { background-color: #003F63; }
         .ann-search-panel { background-color: #f2f2f2; border: 1px solid #ddd; border-radius: 4px; padding: 15px; margin-bottom: 20px; display: none; }
@@ -70,7 +68,6 @@
     styleSheet.textContent = styles;
     document.head.appendChild(styleSheet);
 
-    // 2. HTML
     let container = document.getElementById('announcement-root');
     if (!container) { container = document.createElement('div'); container.id = 'announcement-root'; document.body.appendChild(container); }
     container.innerHTML = `
@@ -111,26 +108,46 @@
         </div>
     `;
 
-    // 3. JS
     const DATA_URL = "https://script.google.com/macros/s/AKfycbwpj87uChIU27uvVX_ssWMBRxrreL8OzGp5i3W5GoUdpThqQukqvrpajAsazAM9dC9C/exec";
     const LOCKED_CATEGORY_ID = null; const ITEMS_PER_PAGE = 10; const NEW_DAYS_LIMIT = 4;
     const IMG_TOP = `<img src="https://esa.ntpc.edu.tw/web-announce/images/top.png" alt="置頂" class="ann-icon-img icon-top" style="height:18px !important; width:auto !important; margin-right:4px; vertical-align:middle;">`;
-    const IMG_NEW = `<img src="https://esa.ntpc.edu.tw/web-announce/images/news.svg" alt="最新" class="ann-icon-img icon-new" style="height:18px !important; width:auto !important; margin-left:6px; vertical-align:middle;">`;
+    const IMG_NEW = `<img src="https://esa.ntpc.edu.tw/web-announce/images/new.svg" alt="最新" class="ann-icon-img icon-new" style="height:18px !important; width:auto !important; margin-left:6px; vertical-align:middle;">`;
+    
+    // ★ 自訂名稱對照表 ★
+    const CUSTOM_NAME_MAP = {
+        "主計室": "會計室",
+        "主計主任": "會計主任"
+    };
+
     const CAT_MAP = { "2": "行政公告", "28": "補助及獎助學金", "29": "人事室公告", "30": "會計室公告", "31": "家長專區", "35": "性別平等", "36": "人權二公約", "37": "校內公告", "38": "人員甄選", "39": "幼兒園", "48": "體育賽事、活動", "156": "新生報到專區", "168": "安全棒球", "7": "研習公告", "34": "防疫專區" };
     const CAT_CONFIG = { "2": { color: "#8B4513" }, "28": { color: "#0056b3" }, "29": { color: "#800080" }, "30": { color: "#A0522D" }, "31": { color: "#006666" }, "35": { color: "#800040" }, "36": { color: "#006400" }, "37": { color: "#0044cc" }, "38": { color: "#5d4037" }, "39": { color: "#556B2F" }, "48": { color: "#2F4F4F" }, "156": { color: "#8B4513" }, "168": { color: "#4682B4" }, "7": { color: "#800000" }, "34": { color: "#e65100" } };
     const CAT_ORDER = ["2", "28", "29", "30", "31", "35", "36", "37", "38", "39", "48", "156", "168", "7"];
-    const DEPT_LIST = ["校長室", "教務處", "學務處", "總務處", "輔導處", "人事室", "會計室", "幼兒園"];
+    const DEPT_LIST = ["校長室", "教務處", "學務處", "總務處", "輔導處", "人事室", "會計室"];
     let allData = [], filteredData = [], currentPage = 1, lastFocused = null;
     const el = { list: document.getElementById('ann-list'), loading: document.getElementById('ann-loading'), pagination: document.getElementById('ann-pagination'), filterGrp: document.getElementById('ann-filter-group'), toolbar: document.getElementById('ann-toolbar'), searchToggle: document.getElementById('ann-toggle-search'), searchPanel: document.getElementById('ann-search-panel'), sStart: document.getElementById('ann-s-start'), sEnd: document.getElementById('ann-s-end'), sCat: document.getElementById('ann-s-cat'), sDept: document.getElementById('ann-s-dept'), sKey: document.getElementById('ann-s-key'), btnSearch: document.getElementById('ann-btn-search'), btnReset: document.getElementById('ann-btn-reset'), modal: document.getElementById('ann-modal'), mTitle: document.getElementById('ann-m-title'), mDept: document.getElementById('ann-m-dept'), mPeriod: document.getElementById('ann-m-period'), mBody: document.getElementById('ann-m-body'), mLinks: document.getElementById('ann-m-links'), mLinkList: document.getElementById('ann-m-link-list'), mAttach: document.getElementById('ann-m-attach'), mFileList: document.getElementById('ann-m-file-list'), mClose: document.getElementById('ann-m-close') };
+    
     function checkIsNew(d) { if(!d)return false; const p=d.split(' ')[0].split('.'); if(p.length!==3)return false; const dt=new Date(parseInt(p[0])+1911,parseInt(p[1])-1,parseInt(p[2])); return (new Date()-dt)/(1000*60*60*24)<=NEW_DAYS_LIMIT; }
     function parseRoc(s) { if(!s)return null; const p=s.split(' ')[0].split('.'); if(p.length<3)return null; return new Date(parseInt(p[0])+1911,parseInt(p[1])-1,parseInt(p[2])); }
+    
     fetch(DATA_URL).then(r=>r.json()).then(json=>{
         if(json.status!=="success") throw new Error("GAS Error");
         el.loading.style.display='none';
         if(!json.data || json.data.length===0) { el.list.innerHTML="<li style='padding:10px'>目前沒有公告。</li>"; return; }
-        allData = json.data;
+        
+        // ★ 核心變更：收到資料後，立即進行名稱替換 ★
+        allData = json.data.map(item => {
+            if (item.department && CUSTOM_NAME_MAP[item.department]) {
+                item.department = CUSTOM_NAME_MAP[item.department];
+            }
+            if (item.job_title && CUSTOM_NAME_MAP[item.job_title]) {
+                item.job_title = CUSTOM_NAME_MAP[item.job_title];
+            }
+            return item;
+        });
+
         if(LOCKED_CATEGORY_ID) { el.toolbar.style.display='none'; el.searchPanel.style.display='none'; applyFilter(LOCKED_CATEGORY_ID); } else { initFilters(); initSearch(); filteredData = allData; renderPage(1); }
     }).catch(e=>{ console.error(e); el.loading.innerHTML="<span style='color:red'>載入失敗</span>"; });
+    
     function initFilters() {
         const counts = {};
         allData.forEach(i => { if(i.category_ids) i.category_ids.forEach(c => counts[c]=(counts[c]||0)+1); });
@@ -183,10 +200,8 @@
             if(!tags) tags = `<span class="ann-tag ann-tag-dept">${item.department}</span>`;
             let titleHtml = "";
             if(item.pub_view == "2") { 
-                // ★ 修正：加上 title
                 titleHtml = `<a href="https://esa.ntpc.edu.tw" target="_blank" class="ann-title-btn" title="需登入系統觀看：${item.title}">${item.is_top==1?IMG_TOP:''}${item.title}${checkIsNew(item.date)?IMG_NEW:''}</a> <a href="https://esa.ntpc.edu.tw" target="_blank" class="ann-login">須登入</a>`; 
             } else { 
-                // ★ 修正：加上 title
                 titleHtml = `<button class="ann-title-btn" onclick="window.annOpen(${start+idx})" title="查看公告：${item.title}">${item.is_top==1?IMG_TOP:''}${item.title}${checkIsNew(item.date)?IMG_NEW:''}</button>`; 
             }
             li.innerHTML = `<div class="ann-date">${dateStr}</div><div class="ann-tags">${tags}</div><div class="ann-title-wrap">${titleHtml}</div>`;
@@ -199,9 +214,7 @@
         const mkBtn = (txt, dis, go, lbl) => { 
             const b = document.createElement('button'); b.className=`ann-page-btn ${txt==currentPage?'active':''}`; 
             b.innerText=txt; b.disabled=dis; b.onclick=()=>renderPage(go); 
-            // 補上 aria-label
-            if(lbl) b.setAttribute('aria-label', lbl);
-            else b.setAttribute('aria-label', `第 ${txt} 頁`);
+            if(lbl) b.setAttribute('aria-label', lbl); else b.setAttribute('aria-label', `第 ${txt} 頁`);
             el.pagination.appendChild(b); 
         };
         const gp = 10, curGp = Math.ceil(currentPage/gp), s = (curGp-1)*gp+1, e = Math.min(s+gp-1, total);
@@ -219,14 +232,12 @@
         el.mBody.innerHTML = item.content_html;
         if(item.link_a||item.link_b) {
             el.mLinks.style.display='block'; let lh = "";
-            // ★ 修正：加上 title
             if(item.link_a) lh += `<li><a href="${item.link_a}" target="_blank" title="參考網址1：${item.link_a}">參考網址1</a></li>`;
             if(item.link_b) lh += `<li><a href="${item.link_b}" target="_blank" title="參考網址2：${item.link_b}">參考網址2</a></li>`;
             el.mLinkList.innerHTML = lh;
         } else el.mLinks.style.display='none';
         if(item.attachments && item.attachments.length>0) {
             el.mAttach.style.display='block'; 
-            // ★ 修正：加上 title
             el.mFileList.innerHTML = item.attachments.map(f=>`<li><a href="${f.url}" target="_blank" title="下載附件：${f.name}">下載：${f.name}</a></li>`).join('');
         } else el.mAttach.style.display='none';
         el.modal.style.display = 'flex'; el.mClose.focus(); document.body.style.overflow = 'hidden';
