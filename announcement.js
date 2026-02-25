@@ -1,4 +1,5 @@
 (function() {
+    // 0. 自動載入字型
     if (!document.getElementById('font-iansui')) {
         const link1 = document.createElement('link'); link1.rel = 'preconnect'; link1.href = 'https://fonts.googleapis.com';
         const link2 = document.createElement('link'); link2.rel = 'preconnect'; link2.href = 'https://fonts.gstatic.com'; link2.crossOrigin = true;
@@ -7,6 +8,7 @@
         document.head.appendChild(link1); document.head.appendChild(link2); document.head.appendChild(link3);
     }
 
+    // 1. CSS
     const styles = `
         :root {
             --ann-bg-color: transparent; --ann-text-color: #222222; --ann-link-color: #0044cc;
@@ -25,7 +27,7 @@
         .ann-filter-btn:hover { background-color: rgba(0,0,0,0.05); }
         .ann-filter-btn.active { background-color: var(--btn-color, #333); color: #fff; }
         .ann-count { background-color: #eee; color: #555; font-size: 0.85em; padding: 1px 6px; border-radius: 4px; min-width: 20px; text-align: center; }
-        .ann-filter-btn.active .ann-count { color: #333; background: rgba(255,255,255,0.8); }
+        .ann-filter-btn.active .ann-count { color: #333; background-color: rgba(255,255,255,0.8); }
         .ann-search-btn { background-color: #005A8C; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 1rem; font-weight: bold; display: flex; align-items: center; gap: 5px; }
         .ann-search-btn:hover { background-color: #003F63; }
         .ann-search-panel { background-color: #f2f2f2; border: 1px solid #ddd; border-radius: 4px; padding: 15px; margin-bottom: 20px; display: none; }
@@ -122,7 +124,7 @@
     const CAT_MAP = { "2": "行政公告", "28": "補助及獎助學金", "29": "人事室公告", "30": "會計室公告", "31": "家長專區", "35": "性別平等", "36": "人權二公約", "37": "校內公告", "38": "人員甄選", "39": "幼兒園", "48": "體育賽事、活動", "156": "新生報到專區", "168": "安全棒球", "7": "研習公告", "34": "防疫專區" };
     const CAT_CONFIG = { "2": { color: "#8B4513" }, "28": { color: "#0056b3" }, "29": { color: "#800080" }, "30": { color: "#A0522D" }, "31": { color: "#006666" }, "35": { color: "#800040" }, "36": { color: "#006400" }, "37": { color: "#0044cc" }, "38": { color: "#5d4037" }, "39": { color: "#556B2F" }, "48": { color: "#2F4F4F" }, "156": { color: "#8B4513" }, "168": { color: "#4682B4" }, "7": { color: "#800000" }, "34": { color: "#e65100" } };
     const CAT_ORDER = ["2", "28", "29", "30", "31", "35", "36", "37", "38", "39", "48", "156", "168", "7"];
-    const DEPT_LIST = ["校長室", "教務處", "學務處", "總務處", "輔導處", "人事室", "會計室"];
+    const DEPT_LIST = ["校長室", "教務處", "學務處", "總務處", "輔導處", "人事室", "會計室", "幼兒園"];
     let allData = [], filteredData = [], currentPage = 1, lastFocused = null;
     const el = { list: document.getElementById('ann-list'), loading: document.getElementById('ann-loading'), pagination: document.getElementById('ann-pagination'), filterGrp: document.getElementById('ann-filter-group'), toolbar: document.getElementById('ann-toolbar'), searchToggle: document.getElementById('ann-toggle-search'), searchPanel: document.getElementById('ann-search-panel'), sStart: document.getElementById('ann-s-start'), sEnd: document.getElementById('ann-s-end'), sCat: document.getElementById('ann-s-cat'), sDept: document.getElementById('ann-s-dept'), sKey: document.getElementById('ann-s-key'), btnSearch: document.getElementById('ann-btn-search'), btnReset: document.getElementById('ann-btn-reset'), modal: document.getElementById('ann-modal'), mTitle: document.getElementById('ann-m-title'), mDept: document.getElementById('ann-m-dept'), mPeriod: document.getElementById('ann-m-period'), mBody: document.getElementById('ann-m-body'), mLinks: document.getElementById('ann-m-links'), mLinkList: document.getElementById('ann-m-link-list'), mAttach: document.getElementById('ann-m-attach'), mFileList: document.getElementById('ann-m-file-list'), mClose: document.getElementById('ann-m-close') };
     
@@ -134,7 +136,7 @@
         el.loading.style.display='none';
         if(!json.data || json.data.length===0) { el.list.innerHTML="<li style='padding:10px'>目前沒有公告。</li>"; return; }
         
-        // ★ 核心變更：收到資料後，立即進行名稱替換 ★
+        // 處室名稱替換
         allData = json.data.map(item => {
             if (item.department && CUSTOM_NAME_MAP[item.department]) {
                 item.department = CUSTOM_NAME_MAP[item.department];
@@ -150,11 +152,28 @@
     
     function initFilters() {
         const counts = {};
-        allData.forEach(i => { if(i.category_ids) i.category_ids.forEach(c => counts[c]=(counts[c]||0)+1); });
+        let originalSystemAllCount = 0; // ★ 用來模擬原系統的「標籤加總」算法
+
+        allData.forEach(i => {
+            if(i.category_ids && Array.isArray(i.category_ids)) {
+                i.category_ids.forEach(c => {
+                    counts[c] = (counts[c]||0) + 1;
+                    originalSystemAllCount++; // 每貼一個標籤就 +1
+                });
+            } else {
+                // 如果有完全沒標籤的邊緣資料（防呆），也算1篇
+                originalSystemAllCount++;
+            }
+        });
+
         el.filterGrp.innerHTML="";
-        createBtn("all", counts["all"]||allData.length);
+        
+        // ★ 這裡強制寫入加總後的數字，完美重現原系統的 "119" ★
+        createBtn("all", originalSystemAllCount);
+        
         CAT_ORDER.forEach(id => { if(CAT_MAP[id] && counts[id]>0) createBtn(id, counts[id]); });
     }
+
     function createBtn(id, count) {
         const name = id==="all"?"全部公告":CAT_MAP[id];
         const color = id==="all"?"#333":(CAT_CONFIG[id]?.color||"#999");
@@ -166,6 +185,7 @@
         btn.onclick = () => { document.querySelectorAll('.ann-filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); applyFilter(id); el.searchPanel.style.display='none'; };
         el.filterGrp.appendChild(btn);
     }
+
     function initSearch() {
         const depts = new Set(DEPT_LIST); allData.forEach(i => { if(i.department) depts.add(i.department); });
         el.sDept.innerHTML='<option value="">全部處室</option>'; Array.from(depts).forEach(d => el.sDept.add(new Option(d,d)));
