@@ -37,7 +37,6 @@
     .nav-link { display: block; color: white; text-align: center; padding: 14px 20px; text-decoration: none; font-size: 1.1em; position: relative; }
     .nav-link:hover, .nav-link:focus { background-color: rgba(0,0,0,0.2); }
     
-    /* ★★★ 無障礙修正：將 display:none 改為 visibility/opacity 隱藏 ★★★ */
     .dropdown-content { 
         visibility: hidden; opacity: 0; 
         position: absolute; background-color: #f9f9f9; min-width: 200px; 
@@ -68,18 +67,13 @@
 
     .container { display: flex; padding: 1.25em; gap: 1.5em; max-width: 100%; margin: 0 auto; width: 100%; box-sizing: border-box; flex: 1; justify-content: center; }
     .col-left, .col-right { width: 20%; flex: 0 1 20%; } 
-    .col-center { width: 60%; flex: 0 1 60%; outline: none; } /* 確保 main focus 時沒有怪異邊框 */
+    .col-center { width: 60%; flex: 0 1 60%; outline: none; }
     .center-content-wrapper { display: flex; flex-wrap: wrap; column-gap: 1.5em; row-gap: 10px; align-content: flex-start; width: 100%; }
     .block-card { margin-bottom: 10px; background: #fff; padding: 10px 10px 5px 10px; border-radius: 5px; width: 100%; box-sizing: border-box; }
     .center-content-wrapper .block-card { margin-bottom: 0 !important; }
     .block-card.half-width { width: calc(50% - 0.75em); }
     .block-card > *:last-child { margin-bottom: 0 !important; }
     h2.block-title { font-size: 1.5em; border-bottom: 2px solid #ccc; padding-bottom: 0.1em; margin-bottom: 8px; margin-top: 0; }
-
-    [data-title] { position: relative; }
-    [data-title]:hover { z-index: 1000; }
-    [data-title]:hover::after { content: attr(data-title); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background-color: #fff; color: #333; border: 1px solid #ccc; box-shadow: 0 4px 10px rgba(0,0,0,0.2); padding: 6px 12px; border-radius: 4px; white-space: nowrap; font-size: 0.9em; z-index: 99999; pointer-events: none; margin-top: 8px; }
-    [data-title]:hover::before { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; margin-top: -4px; border-width: 6px; border-style: solid; border-color: transparent transparent #fff transparent; z-index: 99999; }
 
     .link-list-container { list-style: none; padding: 0; margin: 0; }
     .link-list-entry { list-style: none; margin-bottom: 5px; }
@@ -114,48 +108,43 @@
     }
 </style>
 </head><body>
-<a href="#main_content" class="skip-link">跳到主要內容區塊</a>
+<a href="#main_content" class="skip-link" title="跳至主要內容區塊">跳到主要內容區塊</a>
 <div class="top-nav">
 <div class="top-nav-items">
 <a href="#au" id="au" accesskey="U" title="上方功能區" class="access-key">:::</a>
-<a href="sitemap.html" data-title="網站導覽">網站導覽</a>
+<a href="sitemap.html" title="前往網站導覽頁面">網站導覽</a>
 </div>
 </div>
 <div class="header">
 <div class="header-left">
-<a href="./" class="logo-link" title="返回首頁" data-title="返回首頁">
+<a href="./" class="logo-link" title="回到網站首頁">
 <img src="images/logo.png" alt="網站LOGO" class="school-logo" />
 <div class="school-text"><h1 class="school-title-cn">新北市樹林區三多國民小學郁章石疑實驗站</h1><span class="school-title-en"></span></div>
 </a></div>
 <div class="header-right">
 <form class="search-header" onsubmit="var q = this.querySelector('input').value; if(q) location.href='sitemap.html?q='+encodeURIComponent(q); return false;">
 <label for="headerSearchInput" class="sr-only">搜尋關鍵字</label>
-<input type="text" id="headerSearchInput" placeholder="搜尋本站..." aria-label="搜尋網站" title="請輸入關鍵字">
-<button type="submit" aria-label="搜尋" title="搜尋"><span aria-hidden="true">🔍</span></button>
+<input type="text" id="headerSearchInput" placeholder="搜尋本站..." aria-label="搜尋網站" title="請輸入搜尋關鍵字">
+<button type="submit" aria-label="執行搜尋" title="執行搜尋"><span aria-hidden="true">🔍</span></button>
 </form>
 </div>
-<button class="hamburger" id="hamburger" aria-label="開啟選單">☰</button>
+<button class="hamburger" id="hamburger" aria-label="開啟行動版選單" title="開啟行動版選單">☰</button>
 </div>
 
 <nav class="navbar"><div class="nav-container"><ul class="nav-menu" id="nav-menu">
-<li class="nav-item mobile-only"><a href="./" class="nav-link" data-title="回首頁">首頁</a></li><li class="nav-item mobile-only"><a href="sitemap.html" class="nav-link" data-title="網站導覽">網站導覽</a></li>
-<li class="nav-item mobile-only search-mobile-container"><form class="search-mobile" onsubmit="var q = this.querySelector('input').value; if(q) location.href='sitemap.html?q='+encodeURIComponent(q); return false;"><input type="text"  placeholder="搜尋站內連結..." aria-label="搜尋" title="請輸入關鍵字"><button type="submit" title="搜尋" >🔍</button></form></li></ul></div></nav>
+<li class="nav-item mobile-only"><a href="./" class="nav-link" title="回到網站首頁">首頁</a></li>
+<li class="nav-item mobile-only"><a href="sitemap.html" class="nav-link" title="前往網站導覽頁面">網站導覽</a></li>
+<li class="nav-item mobile-only search-mobile-container"><form class="search-mobile" onsubmit="var q = this.querySelector('input').value; if(q) location.href='sitemap.html?q='+encodeURIComponent(q); return false;"><input type="text"  placeholder="搜尋站內連結..." aria-label="搜尋" title="請輸入行動版搜尋關鍵字"><button type="submit" title="執行行動版搜尋" aria-label="執行行動版搜尋">🔍</button></form></li></ul></div></nav>
 
-<div class="banner-container"><img src="images/banner.png" alt="郁章石疑實驗室" class="banner-img" /></div>
+<div class="banner-container"><img src="images/banner.png" alt="郁章石疑實驗室 橫幅圖片" class="banner-img" /></div>
 <div class="container">
 <aside class="col-left"><a href="#al" id="al" accesskey="L" title="左側區塊" class="access-key">:::</a>
 <div class="block-card" id="blk-left-0">
 <h2 class="block-title" style="color: #FFFFFF; background-color: #9D6B5A; padding: 10px 15px; border-radius: 5px; text-align: center;" tabindex="-1">常用連結</h2>
 <ul class="link-list-container">
-    <li class="link-list-entry">
-        <a href="https://esa.ntpc.edu.tw/" target="_blank" title="校務行政系統 (另開新視窗)" class="link-list-item single-link">校務行政系統</a>
-    </li>
-    <li class="link-list-entry">
-        <a href="https://pts.ntpc.edu.tw/" target="_blank" title="新北市親師生平台 (另開新視窗)" class="link-list-item single-link">新北市親師生平台</a>
-    </li>
-    <li class="link-list-entry">
-        <a href="https://www.ntpc.edu.tw" target="_blank" title="新北市政府教育局 (另開新視窗)" class="link-list-item single-link">新北市政府教育局</a>
-    </li>
+<li class="link-list-entry"><a href="https://esa.ntpc.edu.tw/" target="_blank" title="前往校務行政系統 (另開新視窗)" class="link-list-item single-link">校務行政系統</a></li>
+<li class="link-list-entry"><a href="https://pts.ntpc.edu.tw/" target="_blank" title="前往新北市親師生平台 (另開新視窗)" class="link-list-item single-link">新北市親師生平台</a></li>
+<li class="link-list-entry"><a href="https://www.ntpc.edu.tw" target="_blank" title="前往新北市政府教育局 (另開新視窗)" class="link-list-item single-link">新北市政府教育局</a></li>
 </ul>
 </div>
 </aside>
@@ -177,9 +166,7 @@
 <div class="block-card" id="blk-right-0">
 <h2 class="block-title" style="color: #FFFFFF; background-color: #9D6B5A; padding: 10px 15px; border-radius: 5px; text-align: center;" tabindex="-1">宣導網站</h2>
 <ul class="link-list-container">
-    <li class="link-list-entry">
-        <a href="https://accessibility.moda.gov.tw/" target="_blank" title="無障礙網路空間服務網 (另開新視窗)" class="link-list-item single-link">無障礙網路空間服務網</a>
-    </li>
+<li class="link-list-entry"><a href="https://accessibility.moda.gov.tw/" target="_blank" title="前往無障礙網路空間服務網 (另開新視窗)" class="link-list-item single-link">無障礙網路空間服務網</a></li>
 </ul>
 </div>
 </aside>
@@ -198,7 +185,7 @@
         <div class="nav-container"> © 2026 新北市樹林區三多國民小學 版權所有</div>
     </div>
 </footer>
-<a href="#" id="backToTop" class="back-to-top" title="回到頁首" aria-label="回到頁首"><span aria-hidden="true">▲</span></a>
+<a href="#" id="backToTop" class="back-to-top" title="點擊回到頁首" aria-label="回到頁首"><span aria-hidden="true">▲</span></a>
 
 <script>
     document.getElementById('hamburger').addEventListener('click', function() { var menu = document.getElementById('nav-menu'); menu.classList.toggle('active'); });

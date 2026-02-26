@@ -37,7 +37,6 @@
     .nav-link { display: block; color: white; text-align: center; padding: 14px 20px; text-decoration: none; font-size: 1.1em; position: relative; }
     .nav-link:hover, .nav-link:focus { background-color: rgba(0,0,0,0.2); }
     
-    /* ★★★ 無障礙修正：下拉選單 CSS ★★★ */
     .dropdown-content { 
         visibility: hidden; opacity: 0; 
         position: absolute; background-color: #f9f9f9; min-width: 200px; 
@@ -104,38 +103,39 @@
     @media (max-width: 600px) { .sitemap-wrapper { padding: 15px; } .sitemap-sub-tree > li { width: 100%; } }
 </style>
 </head><body>
-<a href="#main_content" class="skip-link">跳到主要內容區塊</a>
+<a href="#main_content" class="skip-link" title="跳轉至主要內容區塊">跳到主要內容區塊</a>
 <div class="top-nav">
 <div class="top-nav-items">
 <a href="#au" id="au" accesskey="U" title="上方功能區" class="access-key">:::</a>
-<a href="sitemap.html" title="網站導覽">網站導覽</a>
+<a href="sitemap.html" title="前往網站導覽頁面">網站導覽</a>
 </div>
 </div>
 <div class="header">
 <div class="header-left">
-<a href="./" class="logo-link" title="返回首頁">
+<a href="./" class="logo-link" title="回到網站首頁">
 <img src="images/logo.png" alt="網站LOGO" class="school-logo" />
 <div class="school-text"><h1 class="school-title-cn">新北市樹林區三多國民小學郁章石疑實驗站</h1><span class="school-title-en"></span></div>
 </a></div>
 <div class="header-right">
 <form class="search-header" onsubmit="performLocalSearch(); return false;">
 <label for="siteSearch" class="sr-only">搜尋關鍵字</label>
-<input type="text" id="siteSearch" onkeyup="performLocalSearch()" placeholder="搜尋本頁內容..." aria-label="搜尋網站" title="請輸入關鍵字">
-<button type="button" aria-label="搜尋" title="搜尋" onclick="performLocalSearch()"><span aria-hidden="true">🔍</span></button>
+<input type="text" id="siteSearch" onkeyup="performLocalSearch()" placeholder="搜尋本頁內容..." aria-label="搜尋網站" title="請輸入搜尋關鍵字">
+<button type="button" aria-label="執行搜尋" title="執行搜尋" onclick="performLocalSearch()"><span aria-hidden="true">🔍</span></button>
 </form>
 </div>
-<button class="hamburger" id="hamburger" aria-label="開啟選單">☰</button>
+<button class="hamburger" id="hamburger" aria-label="開啟行動版選單" title="開啟行動版選單">☰</button>
 </div>
 
 <nav class="navbar"><div class="nav-container"><ul class="nav-menu" id="nav-menu">
-<li class="nav-item mobile-only"><a href="./" class="nav-link" title="回首頁">首頁</a></li><li class="nav-item mobile-only"><a href="sitemap.html" class="nav-link" title="網站導覽">網站導覽</a></li>
-<li class="nav-item mobile-only search-mobile-container"><form class="search-mobile" onsubmit="return false;"><input type="text" id="mobileSearchInput" onkeyup="filterList(this.value)" placeholder="搜尋站內連結..." aria-label="搜尋" title="請輸入關鍵字"><button type="button" title="搜尋" onclick="filterList(document.getElementById('mobileSearchInput').value)">🔍</button></form></li></ul></div></nav>
+<li class="nav-item mobile-only"><a href="./" class="nav-link" title="回到網站首頁">首頁</a></li>
+<li class="nav-item mobile-only"><a href="sitemap.html" class="nav-link" title="前往網站導覽頁面">網站導覽</a></li>
+<li class="nav-item mobile-only search-mobile-container"><form class="search-mobile" onsubmit="return false;"><input type="text" id="mobileSearchInput" onkeyup="filterList(this.value)" placeholder="搜尋站內連結..." aria-label="搜尋" title="請輸入行動版搜尋關鍵字"><button type="button" title="執行行動版搜尋" aria-label="執行行動版搜尋" onclick="filterList(document.getElementById('mobileSearchInput').value)">🔍</button></form></li></ul></div></nav>
 
-<div class="banner-container"><img src="images/banner.png" alt="郁章石疑實驗室" class="banner-img" /></div>
+<div class="banner-container"><img src="images/banner.png" alt="郁章石疑實驗室 橫幅圖片" class="banner-img" /></div>
 
 <main class="sitemap-wrapper" id="main_content" tabindex="-1">
 <a href="#ac" id="ac" accesskey="C" title="主要內容區" class="access-key">:::</a>
-<div class="breadcrumb" style="margin-bottom:20px; color:#666;"><a href="./" title="回到首頁" style="text-decoration: none;">首頁</a> &gt; <span aria-current="page">網站導覽</span></div>
+<div class="breadcrumb" style="margin-bottom:20px; color:#666;"><a href="./" title="回到網站首頁" style="text-decoration: none;">首頁</a> &gt; <span aria-current="page">網站導覽</span></div>
 <h1 class="sitemap-title">網站導覽</h1>
 <div class="accesskey-info">
 <h2>快速鍵操作說明</h2>
@@ -153,33 +153,33 @@
 <ul class="sitemap-tree" id="sitemapTree">
 <li><span class="node-h1">上方功能區</span>
 <ul class="sitemap-sub-tree">
-<li><a href="sitemap.html" class="node-link" title="網站導覽">網站導覽</a></li>
-<li><a href="./" class="node-link" title="返回首頁">返回首頁</a></li>
-<li><a href="#siteSearch" class="node-link" title="網站搜尋" onclick="document.getElementById('siteSearch').focus(); return false;">網站搜尋</a></li>
+<li><a href="sitemap.html" class="node-link" title="前往網站導覽頁面">網站導覽</a></li>
+<li><a href="./" class="node-link" title="回到網站首頁">返回首頁</a></li>
+<li><a href="#siteSearch" class="node-link" title="跳轉至網站搜尋輸入框" onclick="document.getElementById('siteSearch').focus(); return false;">網站搜尋</a></li>
 </ul></li>
 <li><span class="node-h1">主要內容區</span>
 <ul class="sitemap-sub-tree">
-<li><a href="./#blk-center-0" class="node-link" title="跳至區塊：公告">公告</a></li>
-<li><a href="./#blk-center-1" class="node-link" title="跳至區塊：榮譽榜">榮譽榜</a></li>
+<li><a href="./#blk-center-0" class="node-link" title="跳轉至首頁公告區塊">公告</a></li>
+<li><a href="./#blk-center-1" class="node-link" title="跳轉至首頁榮譽榜區塊">榮譽榜</a></li>
 </ul></li>
 <li><span class="node-h1">左側區塊</span>
 <ul class="sitemap-sub-tree">
-<li><a href="./#blk-left-0" class="node-link" title="跳至區塊：常用連結">常用連結</a>
+<li><a href="./#blk-left-0" class="node-link" title="跳轉至首頁常用連結區塊">常用連結</a>
 <ul class="sitemap-third-tree">
-<li><a href="https://esa.ntpc.edu.tw/" target="_blank" class="node-sub-link" title="校務行政系統 (另開新視窗)">校務行政系統 (另開新視窗)</a></li>
-<li><a href="https://pts.ntpc.edu.tw/" target="_blank" class="node-sub-link" title="新北市親師生平台 (另開新視窗)">新北市親師生平台 (另開新視窗)</a></li>
-<li><a href="https://www.ntpc.edu.tw" target="_blank" class="node-sub-link" title="新北市政府教育局 (另開新視窗)">新北市政府教育局 (另開新視窗)</a></li>
+<li><a href="https://esa.ntpc.edu.tw/" target="_blank" class="node-sub-link" title="前往校務行政系統 (另開新視窗)">校務行政系統 (另開新視窗)</a></li>
+<li><a href="https://pts.ntpc.edu.tw/" target="_blank" class="node-sub-link" title="前往新北市親師生平台 (另開新視窗)">新北市親師生平台 (另開新視窗)</a></li>
+<li><a href="https://www.ntpc.edu.tw" target="_blank" class="node-sub-link" title="前往新北市政府教育局 (另開新視窗)">新北市政府教育局 (另開新視窗)</a></li>
 </ul></li>
 </ul></li>
 <li><span class="node-h1">右側區塊</span>
 <ul class="sitemap-sub-tree">
-<li><a href="./#blk-right-0" class="node-link" title="跳至區塊：宣導網站">宣導網站</a>
+<li><a href="./#blk-right-0" class="node-link" title="跳轉至首頁宣導網站區塊">宣導網站</a>
 <ul class="sitemap-third-tree">
-<li><a href="https://accessibility.moda.gov.tw/" target="_blank" class="node-sub-link" title="無障礙網路空間服務網 (另開新視窗)">無障礙網路空間服務網 (另開新視窗)</a></li>
+<li><a href="https://accessibility.moda.gov.tw/" target="_blank" class="node-sub-link" title="前往無障礙網路空間服務網 (另開新視窗)">無障礙網路空間服務網 (另開新視窗)</a></li>
 </ul></li>
 </ul></li>
 <li><span class="node-h1">下方功能區</span>
-<ul class="sitemap-sub-tree"><li><a href="#ah" class="node-link" title="聯絡方式與版權資訊">聯絡方式與版權資訊</a></li></ul></li>
+<ul class="sitemap-sub-tree"><li><a href="#ah" class="node-link" title="跳轉至下方聯絡方式與版權資訊">聯絡方式與版權資訊</a></li></ul></li>
 </ul>
 </div>
 </main>
