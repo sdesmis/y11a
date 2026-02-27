@@ -97,6 +97,7 @@
         el.loading.style.display='none';
         if(!json.data || json.data.length===0) { el.list.innerHTML="<li style='padding:10px'>目前沒有公告。</li>"; return; }
         allData = json.data.map(item => { if (item.department && CUSTOM_NAME_MAP[item.department]) item.department = CUSTOM_NAME_MAP[item.department]; if (item.job_title && CUSTOM_NAME_MAP[item.job_title]) item.job_title = CUSTOM_NAME_MAP[item.job_title]; return item; });
+        
         if(LOCKED_CATEGORY_ID) { el.toolbar.style.display='none'; el.searchPanel.style.display='none'; applyFilter(LOCKED_CATEGORY_ID); } else { initFilters(); initSearch(); filteredData = allData; renderPage(1); }
     }).catch(e=>{ console.error(e); el.loading.innerHTML="<span style='color:red'>載入失敗</span>"; });
     
@@ -168,9 +169,9 @@
         el.mTitle.innerText = item.title; el.mDept.innerText = item.job_title ? `${item.department} / ${item.job_title}` : item.department;
         el.mPeriod.innerText = (item.date_start&&item.date_end) ? `公告期間：${item.date_start} ~ ${item.date_end}` : "";
         el.mBody.innerHTML = item.content_html;
+        
         if(item.link_a||item.link_b) {
             el.mLinks.style.display='block'; let lh = "";
-            // ★ 無障礙修正：連結加上(另開新視窗)
             if(item.link_a) lh += `<li><a href="${item.link_a}" target="_blank" title="參考網址1：${item.link_a} (另開新視窗)">參考網址1</a></li>`;
             if(item.link_b) lh += `<li><a href="${item.link_b}" target="_blank" title="參考網址2：${item.link_b} (另開新視窗)">參考網址2</a></li>`;
             el.mLinkList.innerHTML = lh;
@@ -178,8 +179,10 @@
         
         if(item.attachments && item.attachments.length>0) {
             el.mAttach.style.display='block'; 
-            // ★ 無障礙修正：附件加上(另開新視窗)
-            el.mFileList.innerHTML = item.attachments.map(f=>`<li><a href="${f.url}" target="_blank" title="下載附件：${f.name} (另開新視窗)">下載：${f.name}</a></li>`).join('');
+            // ★ 修改：動態產生有意義的附件 title，包含公告標題與附件編號 ★
+            el.mFileList.innerHTML = item.attachments.map((f, fileIdx) => {
+                return `<li><a href="${f.url}" target="_blank" title="下載附件：${item.title} - 附件${fileIdx + 1} (另開新視窗)">下載：${f.name}</a></li>`;
+            }).join('');
         } else el.mAttach.style.display='none';
         
         el.modal.style.display = 'flex'; el.mClose.focus(); document.body.style.overflow = 'hidden';
@@ -188,7 +191,6 @@
     function close() { el.modal.style.display = 'none'; document.body.style.overflow = ''; if(lastFocused) lastFocused.focus(); }
     el.mClose.onclick = close; el.modal.onclick = (e) => { if(e.target === el.modal) close(); };
     
-    // ★ 無障礙修正：彈跳視窗內的鍵盤焦點鎖定 (Focus Trap) ★
     el.modal.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') { close(); return; }
         if (e.key === 'Tab') {
