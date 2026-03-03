@@ -85,7 +85,7 @@
     const CAT_MAP = { "2": "行政公告", "28": "補助及獎助學金", "29": "人事室公告", "30": "會計室公告", "31": "家長專區", "35": "性別平等", "36": "人權二公約", "37": "校內公告", "38": "人員甄選", "39": "幼兒園", "48": "體育賽事、活動", "156": "新生報到專區", "168": "安全棒球", "7": "研習公告", "34": "防疫專區" };
     const CAT_CONFIG = { "2": { color: "#8B4513" }, "28": { color: "#0056b3" }, "29": { color: "#800080" }, "30": { color: "#A0522D" }, "31": { color: "#006666" }, "35": { color: "#800040" }, "36": { color: "#006400" }, "37": { color: "#0044cc" }, "38": { color: "#5d4037" }, "39": { color: "#556B2F" }, "48": { color: "#2F4F4F" }, "156": { color: "#8B4513" }, "168": { color: "#4682B4" }, "7": { color: "#800000" }, "34": { color: "#e65100" } };
     const CAT_ORDER = ["2", "28", "29", "30", "31", "35", "36", "37", "38", "39", "48", "156", "168", "7"];
-    const DEPT_LIST = ["校長室", "教務處", "學務處", "總務處", "輔導處", "人事室", "會計室"];
+    const DEPT_LIST = ["校長室", "教務處", "學務處", "總務處", "輔導處", "人事室", "會計室", "幼兒園"];
     let allData = [], filteredData = [], currentPage = 1, lastFocused = null;
     const el = { list: document.getElementById('ann-list'), loading: document.getElementById('ann-loading'), pagination: document.getElementById('ann-pagination'), filterGrp: document.getElementById('ann-filter-group'), toolbar: document.getElementById('ann-toolbar'), searchToggle: document.getElementById('ann-toggle-search'), searchPanel: document.getElementById('ann-search-panel'), sStart: document.getElementById('ann-s-start'), sEnd: document.getElementById('ann-s-end'), sCat: document.getElementById('ann-s-cat'), sDept: document.getElementById('ann-s-dept'), sKey: document.getElementById('ann-s-key'), btnSearch: document.getElementById('ann-btn-search'), btnReset: document.getElementById('ann-btn-reset'), modal: document.getElementById('ann-modal'), mTitle: document.getElementById('ann-m-title'), mDept: document.getElementById('ann-m-dept'), mPeriod: document.getElementById('ann-m-period'), mBody: document.getElementById('ann-m-body'), mLinks: document.getElementById('ann-m-links'), mLinkList: document.getElementById('ann-m-link-list'), mAttach: document.getElementById('ann-m-attach'), mFileList: document.getElementById('ann-m-file-list'), mClose: document.getElementById('ann-m-close') };
     
@@ -177,13 +177,21 @@
             el.mLinkList.innerHTML = lh;
         } else el.mLinks.style.display='none';
         
-        if(item.attachments && item.attachments.length>0) {
+        // ★ 新增邏輯：過濾特定商業軟體格式 (Word, Excel, PPT) ★
+        const validAttachments = (item.attachments || []).filter(f => {
+            if(!f.name) return false;
+            // 透過正則表達式，如果副檔名為 doc, docx, xls, xlsx, ppt, pptx 則回傳 false (過濾掉)
+            return !/\.(doc|docx|xls|xlsx|ppt|pptx)$/i.test(f.name);
+        });
+
+        if(validAttachments.length > 0) {
             el.mAttach.style.display='block'; 
-            // ★ 修改：動態產生有意義的附件 title，包含公告標題與附件編號 ★
-            el.mFileList.innerHTML = item.attachments.map((f, fileIdx) => {
+            el.mFileList.innerHTML = validAttachments.map((f, fileIdx) => {
                 return `<li><a href="${f.url}" target="_blank" title="下載附件：${item.title} - 附件${fileIdx + 1} (另開新視窗)">下載：${f.name}</a></li>`;
             }).join('');
-        } else el.mAttach.style.display='none';
+        } else {
+            el.mAttach.style.display='none';
+        }
         
         el.modal.style.display = 'flex'; el.mClose.focus(); document.body.style.overflow = 'hidden';
     };
