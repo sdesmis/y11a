@@ -164,11 +164,29 @@
         mkBtn(">", currentPage===total, currentPage+1, "下一頁"); if(e<total) mkBtn(">>", false, e+1, "下 10 頁");
     }
     
+    // ★ 檢查是否為簡短內容的 Helper Function ★
+    function isShortContent(htmlStr) {
+        if (!htmlStr) return true;
+        // 移除 HTML 標籤後，將內容去頭去尾空白
+        const plainText = htmlStr.replace(/<[^>]+>/g, '').trim();
+        // 檢查是否只包含這幾個字，或是長度小於 10 且包含這幾個字
+        if (plainText.length < 15 && (plainText.includes('如附件') || plainText.includes('詳附件') || plainText.includes('見附件'))) {
+            return true;
+        }
+        return false;
+    }
+
     window.annOpen = function(idx) {
         const item = filteredData[idx]; lastFocused = document.activeElement;
         el.mTitle.innerText = item.title; el.mDept.innerText = item.job_title ? `${item.department} / ${item.job_title}` : item.department;
         el.mPeriod.innerText = (item.date_start&&item.date_end) ? `公告期間：${item.date_start} ~ ${item.date_end}` : "";
-        el.mBody.innerHTML = item.content_html;
+        
+        // ★ 無障礙修正：自動擴充簡短內容 ★
+        let contentHtml = item.content_html;
+        if (isShortContent(contentHtml)) {
+            contentHtml = `<p><strong>本公告之詳細內容（${item.title}），請參閱下方提供之附件檔案或參考網址。</strong></p>` + contentHtml;
+        }
+        el.mBody.innerHTML = contentHtml;
         
         if(item.link_a||item.link_b) {
             el.mLinks.style.display='block'; let lh = "";
@@ -177,10 +195,8 @@
             el.mLinkList.innerHTML = lh;
         } else el.mLinks.style.display='none';
         
-        // ★ 新增邏輯：過濾特定商業軟體格式 (Word, Excel, PPT) 與 壓縮檔格式 (ZIP, RAR, 7Z 等) ★
         const validAttachments = (item.attachments || []).filter(f => {
             if(!f.name) return false;
-            // 如果副檔名為 doc, docx, xls, xlsx, ppt, pptx, zip, rar, 7z, tar, gz 則回傳 false (過濾掉)
             return !/\.(doc|docx|xls|xlsx|ppt|pptx|zip|rar|7z|tar|gz)$/i.test(f.name);
         });
 
