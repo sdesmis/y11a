@@ -19,13 +19,17 @@
         .hr-count { background: #eee; color: #555; font-size: 0.85em; padding: 1px 6px; border-radius: 4px; min-width: 20px; text-align: center; } .hr-btn.active .hr-count { color: #333; background: rgba(255,255,255,0.8); }
         .hr-list { list-style: none; padding: 0; margin: 0; } .hr-item { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid #eee; }
         .hr-img-box { flex-shrink: 0; width: 220px; height: 155px; position: relative; background: #fff; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .hr-static-btn { width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
+        /* ★ 移除原本按鈕的 CSS，改為單純圖片樣式 ★ */
         .hr-thumb { max-width: 100%; max-height: 100%; object-fit: contain; padding: 3px; background: #fff; display: block; box-sizing: border-box; }
-        .hr-static-btn:focus { outline: var(--hr-focus-outline); } 
+        
         .hr-mc { width: 100%; height: 100%; position: relative; overflow: hidden; }
-        .hr-mc-slide { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: none; cursor: pointer; background: #fff; align-items: center; justify-content: center; }
+        
+        /* ★ 移除 cursor: pointer，因為不再能點擊 ★ */
+        .hr-mc-slide { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: none; background: #fff; align-items: center; justify-content: center; }
         .hr-mc-slide.active { display: flex; }
         .hr-mc-slide img { max-width: 100%; max-height: 100%; object-fit: contain; padding: 3px; background: #fff; box-sizing: border-box; display: block; }
+        
         .hr-mc-ctl { position: absolute; background: rgba(0,0,0,0.6); color: #fff; border: 0; cursor: pointer; z-index: 5; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
         .hr-mc-ctl:hover { background-color: rgba(0,0,0,0.85); } .hr-mc-ctl:focus { outline: var(--hr-focus-outline); background: #000; border: 2px solid #ffcc00; }
         .hr-play { top: 5px; left: 5px; width: 28px; height: 28px; border-radius: 50%; font-size: 0.8rem; }
@@ -118,8 +122,8 @@
             let imgHtml = ""; const imgs = item.images||[];
             if(imgs.length > 1) {
                 const mid = `hr-mc-${item.id}-${idx}`;
-                // ★ 無障礙修正：替輪播容器的按鈕加上 tabindex="-1" aria-hidden="true" 避免報讀軟體重複讀取圖片連結
-                const slides = imgs.map((m,i)=>`<div class="hr-mc-slide ${i===0?'active':''}" onclick="window.hrOpen(${start+idx})" tabindex="-1" aria-hidden="true"><img src="${m.url}" alt=""></div>`).join('');
+                // ★ 修正 1：移除點擊 onclick 功能，並加上有意義的 alt 文字 ★
+                const slides = imgs.map((m,i)=>`<div class="hr-mc-slide ${i===0?'active':''}"><img src="${m.url}" alt="${item.title} 照片 ${i+1}"></div>`).join('');
                 imgHtml = `<div class="hr-img-box"><div class="hr-mc" id="${mid}" onmouseenter="window.hrPause('${mid}')" onmouseleave="window.hrResume('${mid}')">
                     <button class="hr-mc-ctl hr-play" onclick="window.hrToggle('${mid}',event)" aria-label="暫停輪播" title="暫停/播放">⏸</button>
                     <button class="hr-mc-ctl hr-nav hr-prev" onclick="window.hrPrev('${mid}',event)" aria-label="上一張" title="上一張">❮</button>
@@ -128,8 +132,8 @@
                 setTimeout(()=>initMC(mid, imgs.length),0);
             } else {
                 let src = (imgs.length===1) ? imgs[0].url : DEF_IMGS[(parseInt(item.id)||0)%5];
-                // ★ 無障礙修正：將單圖按鈕從無障礙樹中隱藏 (tabindex="-1" aria-hidden="true")
-                imgHtml = `<div class="hr-img-box"><button class="hr-static-btn" onclick="window.hrOpen(${start+idx})" tabindex="-1" aria-hidden="true"><img src="${src}" class="hr-thumb" alt=""></button></div>`;
+                // ★ 修正 2：移除 <button> 包覆，只保留圖片，並加上有意義的 alt 文字 ★
+                imgHtml = `<div class="hr-img-box"><img src="${src}" class="hr-thumb" alt="${item.title} 照片"></div>`;
             }
             
             const descId = `desc-${item.id}`, btnId = `btn-${item.id}`; let desc = `<div class="hr-desc">${item.content||''}</div>`, more="";
@@ -157,7 +161,6 @@
         el.mTitle.innerText = i.title; el.mBody.innerText = i.content; el.mDate.innerText = i.date; el.mDept.innerText = i.dept;
         if(i.images && i.images.length>0) {
             el.mPhotos.style.display='block';
-            // ★ 無障礙修正：只在第一張圖片給詳細的 alt，其餘設為空 (alt="")，且連結加上另開新視窗
             el.pList.innerHTML = i.images.map((m, photoIdx) => {
                 const altText = (photoIdx === 0) ? `${i.title} 照片，共 ${i.images.length} 張` : "";
                 return `<li class="hr-photo-item"><a href="${m.url}" target="_blank" title="下載原圖：${i.title} (第 ${photoIdx+1} 張) (另開新視窗)"><img src="${m.url}" alt="${altText}"></a></li>`;
@@ -169,7 +172,6 @@
     function close() { el.modal.style.display = 'none'; document.body.style.overflow = ''; if(lastFocused) lastFocused.focus(); }
     el.mClose.onclick = close; el.modal.onclick = (e) => { if(e.target === el.modal) close(); };
     
-    // ★ 無障礙修正：彈跳視窗內的鍵盤焦點鎖定 (Focus Trap) ★
     el.modal.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') { close(); return; }
         if (e.key === 'Tab') {
