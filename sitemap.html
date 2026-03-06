@@ -12,7 +12,7 @@
     .access-key:focus { outline: 2px solid yellow; color: #fff; }
     
     /* 上方功能列 (Accesskey U) */
-    .top-nav { background-color: #000000; color: #fff; padding: 5px 20px; display: flex; justify-content: flex-end; align-items: center; font-size: 0.95em; }
+    .top-nav { background-color: #9D6B5A; color: #fff; padding: 5px 20px; display: flex; justify-content: flex-end; align-items: center; font-size: 0.95em; }
     .top-nav-items { display: flex; gap: 15px; align-items: center; }
     .top-nav a { color: #fff; text-decoration: none; transition: opacity 0.2s; }
     .top-nav a:hover { text-decoration: underline; opacity: 0.9; }
@@ -31,10 +31,10 @@
     .header-right { display: flex; align-items: center; gap: 10px; }
     .search-header { display: flex; align-items: center; border: 1px solid #ccc; border-radius: 20px; padding: 2px 5px; background: #fff; height: 36px; }
     .search-header input { border: none; outline: none; padding: 0 10px; font-size: 1em; width: 150px; background: transparent; }
-    .search-header button { background: none; border: none; cursor: pointer; font-size: 1.1em; color: #000000; padding: 0 8px; display: flex; align-items: center; }
+    .search-header button { background: none; border: none; cursor: pointer; font-size: 1.1em; color: #9D6B5A; padding: 0 8px; display: flex; align-items: center; }
     
     /* 導覽列 Navbar */
-    .navbar { background-color: #000000; }
+    .navbar { background-color: #9D6B5A; }
     .nav-container { max-width: 100%; margin: 0 auto; padding: 0 10px; }
     
     /* ★★★ 這裡使用了 navAlign 變數來控制置中或靠左 ★★★ */
@@ -57,7 +57,7 @@
     .dropdown-content a:hover { background-color: #ddd; }
     .nav-item:hover .dropdown-content { display: block; }
     .nav-item:focus-within .dropdown-content { display: block; }
-    .hamburger { display: none; background: none; border: none; color: #000000; font-size: 2.5em; cursor: pointer; position: absolute; top: 15px; right: 20px; }
+    .hamburger { display: none; background: none; border: none; color: #9D6B5A; font-size: 2.5em; cursor: pointer; position: absolute; top: 15px; right: 20px; }
     .mobile-only { display: none; }
     
     /* 橫幅 Banner */
@@ -81,7 +81,7 @@
     /* 頁尾獨立版權條 */
     .footer-copyright {
         width: 100%;
-        background-color: #000000;
+        background-color: #9D6B5A;
         color: #fff;
         text-align: center;
         padding: 15px 0;
@@ -111,7 +111,7 @@
     .link-list-container { list-style: none; padding: 0; margin: 0; }
     .link-list-entry { list-style: none; margin-bottom: 5px; }
     .single-link { display: block; text-decoration: none; color: #333; background-color: #fff; border: 1px solid #ddd; padding: 12px 15px; border-radius: 5px; transition: all 0.2s; }
-    .single-link:hover { background-color: #f9f9f9; color: #000000; border-color: #000000; }
+    .single-link:hover { background-color: #f9f9f9; color: #9D6B5A; border-color: #9D6B5A; }
     
     a.img-link { display: block; text-align: center; margin-bottom: 5px; text-decoration: none; border: 1px solid #eee; padding: 5px; border-radius: 5px; transition: transform 0.2s; position: relative; overflow: visible; }
     a.img-link:hover { transform: scale(1.02); box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; }
@@ -141,39 +141,39 @@
     .dot.active, .dot:hover, .dot:focus { background-color: #717171; outline: 2px solid blue; }
 
     .marquee-container { position: relative; overflow: hidden; background: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 5px 5px 5px 90px; display: flex; align-items: center; height: 40px; }
-    .marquee-controls { position: absolute; left: 0; top: 0; bottom: 0; width: 85px; background: #fff; color: #000000; z-index: 10; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9em; border-right: 1px solid #eee; }
-    .marquee-btn { background: #fff; border: 1px solid #000000; color: #000000; cursor: pointer; font-size: 0.8em; padding: 2px 5px; margin-left: 5px; border-radius: 3px; }
-    .marquee-btn:hover, .marquee-btn:focus { background: #000000; color: #fff; outline: 2px solid yellow; }
+    .marquee-controls { position: absolute; left: 0; top: 0; bottom: 0; width: 85px; background: #fff; color: #9D6B5A; z-index: 10; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9em; border-right: 1px solid #eee; }
+    .marquee-btn { background: #fff; border: 1px solid #9D6B5A; color: #9D6B5A; cursor: pointer; font-size: 0.8em; padding: 2px 5px; margin-left: 5px; border-radius: 3px; }
+    .marquee-btn:hover, .marquee-btn:focus { background: #9D6B5A; color: #fff; outline: 2px solid yellow; }
     .marquee-content-wrapper { width: 100%; overflow: hidden; }
     .marquee-track { white-space: nowrap; display: inline-block; animation: marquee-scroll 25s linear infinite; padding-left: 100%; }
     .marquee-paused .marquee-track, .marquee-track:hover, .marquee-track:focus-within { animation-play-state: paused; }
     .marquee-item { display: inline-block; margin-right: 40px; font-size: 1.1em; color: #333; text-decoration: none; vertical-align: middle; position: relative; }
-    .marquee-item:hover, .marquee-item:focus { color: #000000; text-decoration: underline; outline: 2px solid blue; }
+    .marquee-item:hover, .marquee-item:focus { color: #9D6B5A; text-decoration: underline; outline: 2px solid blue; }
     .marquee-item::before { content: '📢 '; margin-right: 3px; }
     @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
     .dept-nav { margin-bottom: 30px; }
     .dept-buttons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; border-bottom: 1px solid #eee; padding-bottom: 20px; }
     .dept-btn { padding: 10px 25px; background-color: #fff; color: #555; border: 1px solid #ccc; border-radius: 50px; cursor: pointer; font-size: 1.1em; transition: all 0.3s ease; font-family: inherit; font-weight: bold; min-width: 100px; }
-    .dept-btn:hover, .dept-btn:focus { border-color: #000000; color: #000000; background-color: #f0f8ff; outline: 2px solid #000000; outline-offset: 2px; }
-    .dept-btn.active { background-color: #000000; color: #fff; border-color: #000000; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transform: translateY(-1px); }
+    .dept-btn:hover, .dept-btn:focus { border-color: #9D6B5A; color: #9D6B5A; background-color: #f0f8ff; outline: 2px solid #9D6B5A; outline-offset: 2px; }
+    .dept-btn.active { background-color: #9D6B5A; color: #fff; border-color: #9D6B5A; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transform: translateY(-1px); }
     .dept-content { display: none; line-height: 1.8; font-size: 1.15em; color: #333; animation: fadeIn 0.5s; padding: 10px; }
     .dept-content.active { display: block; }
-    .dept-content h2 { color: #000000; border-left: 5px solid #000000; padding-left: 10px; margin-bottom: 20px; font-size: 1.6em; }
+    .dept-content h2 { color: #9D6B5A; border-left: 5px solid #9D6B5A; padding-left: 10px; margin-bottom: 20px; font-size: 1.6em; }
     .dept-content strong { color: #000; font-weight: bold; }
     .dept-content a { color: #0056b3; text-decoration: none; }
     .dept-content a:hover { text-decoration: underline; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
     .accordion-btn { width: 100%; background-color: #fff; color: #333; cursor: pointer; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; text-align: left; outline: none; font-size: 1.1em; font-family: inherit; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
-    .accordion-btn:hover, .accordion-btn:focus { background-color: #f0f8ff; color: #000000; border-color: #000000; outline: 2px solid yellow; }
-    .accordion-btn[aria-expanded="true"] { background-color: #000000; color: #fff; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    .accordion-btn:hover, .accordion-btn:focus { background-color: #f0f8ff; color: #9D6B5A; border-color: #9D6B5A; outline: 2px solid yellow; }
+    .accordion-btn[aria-expanded="true"] { background-color: #9D6B5A; color: #fff; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
     .accordion-btn[aria-expanded="true"] .acc-icon { transform: rotate(180deg); }
     .acc-icon { transition: transform 0.3s ease; font-size: 0.8em; }
     .accordion-panel { padding: 0; background-color: #fafafa; border: 1px solid #ddd; border-top: none; border-radius: 0 0 5px 5px; list-style: none; margin: 0; }
     .accordion-panel[hidden] { display: none; }
     .sub-link-item a { display: block; padding: 10px 15px 10px 30px; text-decoration: none; color: #555; border-bottom: 1px dashed #eee; transition: 0.2s; position: relative; }
-    .sub-link-item a:hover, .sub-link-item a:focus { background-color: #eee; color: #000000; padding-left: 35px; outline: 2px solid yellow; }
+    .sub-link-item a:hover, .sub-link-item a:focus { background-color: #eee; color: #9D6B5A; padding-left: 35px; outline: 2px solid yellow; }
     .sub-link-item a::before { content: '↳'; position: absolute; left: 15px; color: #999; font-size: 0.9em; }
     .sub-link-item:last-child a { border-bottom: none; }
 
@@ -196,20 +196,20 @@
         opacity: 0.8;
         transition: opacity 0.3s, background-color 0.3s;
     }
-    .back-to-top:hover { opacity: 1; background-color: #000000; }
-    .back-to-top:focus { outline: 3px solid yellow; opacity: 1; background-color: #000000; } 
+    .back-to-top:hover { opacity: 1; background-color: #9D6B5A; }
+    .back-to-top:focus { outline: 3px solid yellow; opacity: 1; background-color: #9D6B5A; } 
 
     /* ★★★ 手機版 RWD (這段非常重要，不能刪) ★★★ */
     @media (max-width: 900px) {
         .school-title-cn { font-size: 1.8em; } .school-title-en { font-size: 1em; }
         .header-left { width: 80%; } .school-logo { height: 60px; margin-right: 10px; }
         .header-right { display: none; } .hamburger { display: block; }
-        .mobile-only { display: block; border-bottom: 1px solid rgba(255,255,255,0.2); background-color: #000000; }
-        .navbar { background-color: #fff; border-bottom: 2px solid #000000; }
+        .mobile-only { display: block; border-bottom: 1px solid rgba(255,255,255,0.2); background-color: #9D6B5A; }
+        .navbar { background-color: #fff; border-bottom: 2px solid #9D6B5A; }
         .nav-container { flex-wrap: wrap; }
-        .nav-menu { display: none; flex-direction: column; width: 100%; background-color: #000000; order: 3; }
+        .nav-menu { display: none; flex-direction: column; width: 100%; background-color: #9D6B5A; order: 3; }
         .nav-menu.active { display: flex; } .nav-item { width: 100%; border-bottom: 1px solid rgba(255,255,255,0.2); }
-        .dropdown-content { position: relative; display: block; width: 100%; box-shadow: none; background-color: #000000; top: 0; }
+        .dropdown-content { position: relative; display: block; width: 100%; box-shadow: none; background-color: #9D6B5A; top: 0; }
         .dropdown-content a { color: #fff; padding-left: 30px; } .nav-item:hover .dropdown-content { display: block; }
         .container { flex-direction: column; }
         .col-left, .col-center, .col-right { width: 100%; order: 0; flex: 1 1 100%; }
