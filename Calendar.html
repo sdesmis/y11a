@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>行事曆</title>
+  <style>
+    /* 引入 Google Fonts: 一筆字體 */
+    @import url('https://fonts.googleapis.com/css2?family=Iansui:wght@400;700&display=swap');
+
+    :root {
+      --p-blue: #003366;
+      --text: #212121;
+    }
+
+    body {
+      font-family: 'Iansui', "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      background-color: #f4f7f9;
+      line-height: 1.6;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: var(--p-blue);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    /* 導覽面板 */
+    .nav-panel {
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid #ddd;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .nav-group { display: flex; align-items: flex-end; gap: 8px; }
+    .input-group { display: flex; flex-direction: column; gap: 4px; }
+    .input-group label { font-weight: bold; color: var(--p-blue); font-size: 0.9rem; }
+
+    input[type="date"] {
+      padding: 6px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      min-height: 40px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    button {
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      min-height: 44px;
+      padding: 0 15px;
+      white-space: nowrap;
+      transition: 0.2s;
+      font-family: inherit;
+      outline: none !important;
+    }
+
+    /* 按鈕顏色定義 */
+    .btn-search { background: var(--p-blue); color: white; }
+    .btn-batch-ics { background: #E67E22; color: white; }
+    .btn-nav { background: #555; color: white; }
+    .btn-today { background: #006644; color: white; }
+    button:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    /* 行程卡片區 */
+    .event-container { display: flex; flex-direction: column; gap: 12px; }
+    .event-card {
+      background: #fff;
+      border-radius: 8px;
+      border-left: 10px solid #ccc;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .event-header {
+      background: #F8F9FA;
+      padding: 8px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .date-badge { color: #d32f2f; font-weight: bold; }
+    .dept-badge { padding: 2px 10px; border-radius: 15px; font-size: 0.85rem; font-weight: bold; color: white; }
+
+    .event-body { padding: 12px 15px; position: relative; }
+    .event-title { font-size: 1.25rem; font-weight: bold; display: block; margin-bottom: 5px; color: #000; padding-right: 80px; }
+    .event-meta { font-size: 1rem; color: #555; display: flex; gap: 15px; flex-wrap: wrap; }
+
+    .btn-ics {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: #fff;
+      border: 1px solid #ddd !important;
+      color: #555 !important;
+      padding: 4px 8px !important;
+      min-height: 32px !important;
+      font-size: 0.8rem !important;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 850px) {
+      .nav-panel { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>行事曆</h1>
+
+  <nav class="nav-panel" aria-label="行事曆控制台">
+    <div class="nav-group">
+      <button id="cal-btn-week">週</button>
+      <button id="cal-btn-month">月</button>
+    </div>
+    <div class="input-group">
+      <label for="cal-sdate">開始日期</label>
+      <input type="date" id="cal-sdate">
+    </div>
+    <div class="input-group">
+      <label for="cal-edate">結束日期</label>
+      <input type="date" id="cal-edate">
+    </div>
+    <div class="nav-group">
+      <button id="cal-btn-load" class="btn-search">查詢</button>
+      <button id="cal-btn-batch" class="btn-batch-ics">打包下載日曆</button>
+      <button id="cal-btn-prev" class="btn-nav">←</button>
+      <button id="cal-btn-today" class="btn-today">今天</button>
+      <button id="cal-btn-next" class="btn-nav">→</button>
+    </div>
+  </nav>
+
+  <div id="cal-status" aria-live="polite" style="text-align:center; color:#004080; font-weight:bold; margin-bottom:10px;"></div>
+  <div id="cal-output"></div>
+
+  <script>
+    (function() {
+      const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx9r9QWKbTx575drDooLaZgl2Y7M2IQqjIexcCRj55rSjf-ML0IQdiRQ_IrPORTdznb/exec"; 
+
+      let currentMode = 'week'; 
+      let pivotDate = new Date(); 
+      pivotDate.setHours(0, 0, 0, 0);
+      let currentEvents = []; 
+
+      const deptColors = { 
+        "教務處": "#3478AF", "學務處": "#E67E22", "總務處": "#27AE60", 
+        "輔導室": "#9B59B6", "人事室": "#E74C3C", "會計室": "#7F8C8D", 
+        "校長室": "#F1C40F", "幼兒園": "#FF69B4" 
+      };
+
+      const formatYMD = (d) => {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const r = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${r}`;
+      };
+
+      const getSunday = (d) => {
+        const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        const day = date.getDay();
+        date.setDate(date.getDate() - day);
+        return date;
+      };
+
+      const createVEvent = (title, dateStr, loc) => {
+        let y = parseInt(dateStr.split('-')[0]);
+        if (y < 1000) y += 1911; 
+        const isoDate = y + dateStr.substring(dateStr.indexOf('-')).replace(/-/g, '');
+        return [
+          "BEGIN:VEVENT",
+          `SUMMARY:${title}`,
+          `DTSTART;VALUE=DATE:${isoDate}`,
+          `DTEND;VALUE=DATE:${isoDate}`,
+          `LOCATION:${loc}`,
+          "DESCRIPTION:由校務行事曆系統產生",
+          "END:VEVENT"
+        ].join("\r\n");
+      };
+
+      window.downloadIcs = (title, dateStr, loc) => {
+        const content = ["BEGIN:VCALENDAR", "VERSION:2.0", "PROID:-//School//TW", createVEvent(title, dateStr, loc), "END:VCALENDAR"].join("\r\n");
+        saveFile(content, `${title}.ics`);
+      };
+
+      const downloadAllIcs = () => {
+        if (currentEvents.length === 0) { alert("目前無行程可供打包"); return; }
+        let content = ["BEGIN:VCALENDAR", "VERSION:2.0", "PROID:-//School//TW"];
+        currentEvents.forEach(ev => content.push(createVEvent(ev.title, ev.date, ev.loc)));
+        content.push("END:VCALENDAR");
+        saveFile(content.join("\r\n"), `校務行程打包_${document.getElementById('cal-sdate').value}.ics`);
+      };
+
+      const saveFile = (str, filename) => {
+        const blob = new Blob([str], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+      };
+
+      const loadData = async () => {
+        const out = document.getElementById('cal-output');
+        const status = document.getElementById('cal-status');
+        const s = document.getElementById('cal-sdate').value.replace(/-/g, '');
+        const e = document.getElementById('cal-edate').value.replace(/-/g, '');
+        out.innerHTML = '<div style="text-align:center;padding:30px;">載入中...</div>';
+        try {
+          const resp = await fetch(`${GAS_API_URL}?sdate=${s}&edate=${e}`);
+          const result = await resp.json();
+          if (result.status === "success") {
+            renderEvents(result.data);
+            status.textContent = `顯示範圍：${document.getElementById('cal-sdate').value} ~ ${document.getElementById('cal-edate').value}`;
+          }
+        } catch (err) { out.innerHTML = "連線失敗。"; }
+      };
+
+      const renderEvents = (html) => {
+        const out = document.getElementById('cal-output');
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const tables = doc.querySelectorAll('.daily_tab5');
+        currentEvents = []; 
+        if (tables.length === 0) { out.innerHTML = '<div style="text-align:center;padding:30px;">目前無行程。</div>'; return; }
+
+        let h = '<div class="event-container">';
+        tables.forEach(t => {
+          const r = t.querySelectorAll('tr');
+          const dept = r[0]?.innerText.trim() || "";
+          const time = r[1]?.innerText.trim() || "";
+          const title = r[2]?.innerText.trim() || "";
+          const loc = r[3]?.innerText.trim() || "";
+          let dateStr = "";
+          let sib = t.nextElementSibling;
+          while(sib) {
+            if(sib.id && sib.id.startsWith('id_')) { 
+              const m = sib.innerText.match(/\d{3}-\d{2}-\d{2}/);
+              if(m) { dateStr = m[0]; break; }
+            }
+            if(sib.classList.contains('daily_tab5')) break;
+            sib = sib.nextElementSibling;
+          }
+
+          if (title) {
+            currentEvents.push({ title, date: dateStr, loc });
+            const color = deptColors[dept] || "#7F8C8D";
+            const timeHtml = (time && time !== "全天" && time !== "00:00 ~ 00:00") ? `<span>🕒 ${time}</span>` : "";
+            const locHtml = loc ? `<span style="color:#336699;font-weight:bold;">📍 ${loc}</span>` : "";
+
+            h += `<article class="event-card" style="border-left-color: ${color}">
+                    <header class="event-header">
+                      <span class="date-badge">📅 ${dateStr}</span>
+                      <span class="dept-badge" style="background:${color}">${dept}</span>
+                    </header>
+                    <div class="event-body">
+                      <strong class="event-title">${title}</strong>
+                      <button class="btn-ics" onclick="downloadIcs('${title}', '${dateStr}', '${loc}')">匯出</button>
+                      <div class="event-meta">
+                        ${timeHtml}
+                        ${locHtml}
+                      </div>
+                    </div>
+                  </article>`;
+          }
+        });
+        out.innerHTML = h + '</div>';
+      };
+
+      const setModeUI = (mode) => {
+        currentMode = mode;
+        const bW = document.getElementById('cal-btn-week'), bM = document.getElementById('cal-btn-month');
+        const aS = "background:#003366!important;color:#fff!important;pointer-events:none;cursor:default;";
+        const iS = "background:#eee!important;color:#333!important;pointer-events:auto;cursor:pointer;border:2px solid #ccc!important;";
+        bW.style.cssText = (mode==='week'?aS:iS); bM.style.cssText = (mode==='month'?aS:iS);
+        
+        const d = new Date(pivotDate.getTime());
+        if (mode === 'week') {
+          const sun = getSunday(d);
+          const sat = new Date(sun.getFullYear(), sun.getMonth(), sun.getDate() + 6);
+          document.getElementById('cal-sdate').value = formatYMD(sun);
+          document.getElementById('cal-edate').value = formatYMD(sat);
+        } else {
+          const first = new Date(d.getFullYear(), d.getMonth(), 1);
+          const last = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+          document.getElementById('cal-sdate').value = formatYMD(first);
+          document.getElementById('cal-edate').value = formatYMD(last);
+        }
+        loadData();
+      };
+
+      // 事件綁定
+      document.getElementById('cal-btn-week').onclick = () => setModeUI('week');
+      document.getElementById('cal-btn-month').onclick = () => setModeUI('month');
+      document.getElementById('cal-btn-batch').onclick = downloadAllIcs;
+      document.getElementById('cal-btn-load').onclick = loadData;
+      document.getElementById('cal-btn-today').onclick = () => { pivotDate = new Date(); setModeUI(currentMode); };
+      document.getElementById('cal-btn-prev').onclick = () => { 
+        if(currentMode==='week') pivotDate.setDate(pivotDate.getDate()-7); else pivotDate.setMonth(pivotDate.getMonth()-1);
+        setModeUI(currentMode);
+      };
+      document.getElementById('cal-btn-next').onclick = () => { 
+        if(currentMode==='week') pivotDate.setDate(pivotDate.getDate()+7); else pivotDate.setMonth(pivotDate.getMonth()+1);
+        setModeUI(currentMode);
+      };
+      
+      setModeUI('week');
+    })();
+  </script>
+</body>
+</html>
